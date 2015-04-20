@@ -1,7 +1,6 @@
-﻿using System;
-using System.Linq;
+﻿using JustObjectsPrototype.UI;
+using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace JustObjectsPrototype
@@ -21,11 +20,9 @@ namespace JustObjectsPrototype
 				new Domain.Rechnung { Betrag = 150.00m, Empfänger = new Domain.Kunde { Nachname = "Müller"} },
 			};
 
-			var viewModel = new MainWindowModel(objects);
-
 			var window = new MainWindow
 			{
-				DataContext = viewModel
+				DataContext = new MainWindowModel(objects)
 			};
 			window.ShowDialog();
 		}

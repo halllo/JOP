@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Linq.Expressions;
 
-namespace JustObjectsPrototype
+namespace JustObjectsPrototype.UI
 {
 	public abstract class ViewModel : INotifyPropertyChanged
 	{

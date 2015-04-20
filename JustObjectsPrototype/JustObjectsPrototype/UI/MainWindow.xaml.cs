@@ -1,5 +1,5 @@
 ﻿
-namespace JustObjectsPrototype
+namespace JustObjectsPrototype.UI
 {
 	public partial class MainWindow
 	{
