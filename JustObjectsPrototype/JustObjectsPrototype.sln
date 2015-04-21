@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JustObjectsPrototype", "Jus
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{2BAD68C1-3BB2-41D8-87B6-91A0FA1C15B5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JustObjectsPrototype.Tests", "JustObjectsPrototype.Tests\JustObjectsPrototype.Tests.csproj", "{16CCEE76-0C01-493A-98C0-B447FAC7F0F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{2BAD68C1-3BB2-41D8-87B6-91A0FA1C15B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BAD68C1-3BB2-41D8-87B6-91A0FA1C15B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BAD68C1-3BB2-41D8-87B6-91A0FA1C15B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16CCEE76-0C01-493A-98C0-B447FAC7F0F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16CCEE76-0C01-493A-98C0-B447FAC7F0F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16CCEE76-0C01-493A-98C0-B447FAC7F0F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16CCEE76-0C01-493A-98C0-B447FAC7F0F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

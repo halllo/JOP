@@ -10,7 +10,7 @@ namespace JustObjectsPrototype
 		[STAThreadAttribute()]
 		public static void Main()
 		{
-			var objects = new List<object> 
+			var objects = new System.Collections.ObjectModel.ObservableCollection<object> 
 			{
 				new Domain.Akte { Name = "Akte 1" },
 				new Domain.Akte { Name = "Akte 2" },
