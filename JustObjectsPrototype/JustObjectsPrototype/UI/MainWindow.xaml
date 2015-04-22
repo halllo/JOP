@@ -45,7 +45,8 @@
 
 		<DataGrid Grid.Column="1" Grid.Row="1"
 				  HorizontalGridLinesBrush="LightGray" VerticalGridLinesBrush="LightGray"
-				 ItemsSource="{Binding Objects}" SelectionMode="Single" SelectedItem="{Binding SelectedObject}" IsReadOnly="True" >
+				  ItemsSource="{Binding Objects}" SelectionMode="Single" SelectedItem="{Binding SelectedObject}" IsReadOnly="True"
+				  AutoGenerateColumns="False" local:DataGridColumnsBehavior.BindableColumns="{Binding Columns}">
 			<DataGrid.CellStyle>
 				<Style TargetType="DataGridCell">
 					<Setter Property="Padding" Value="5"/>

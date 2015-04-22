@@ -3,6 +3,8 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 
 namespace JustObjectsPrototype.UI
 {
@@ -12,8 +14,16 @@ namespace JustObjectsPrototype.UI
 
 		public MainWindowModel(ICollection<object> objects, List<Type> types = null)
 		{
+			//TODO: WrapDirection in proxies with INotifyPropertyChanged
+			//http://www.codeproject.com/Articles/100710/Using-DynamicObject-to-Implement-General-Proxy-Cla
+			//http://stackoverflow.com/questions/320089/how-do-i-bind-a-wpf-datagrid-to-a-variable-number-of-columns/4379965#4379965
+
+
+
+
 			_Objects = new Objects(objects);
 
+			Columns = new ObservableCollection<DataGridColumn>();
 			Types = types != null ? new ObservableCollection<Type>(types) : _Objects.Types;
 			Functions = new List<string> { "do1", "do2" };
 
@@ -23,8 +33,9 @@ namespace JustObjectsPrototype.UI
 				execute: () =>
 				{
 					var newObject = Activator.CreateInstance(SelectedType);
-					Objects.Add(newObject);
-					SelectedObject = newObject;
+					var newProxy = new ObjectProxy(newObject);
+					Objects.Add(newProxy);
+					SelectedObject = newProxy;
 				},
 				canExecute: () => SelectedType != null);
 			Delete = new Command(
@@ -50,15 +61,22 @@ namespace JustObjectsPrototype.UI
 				selectedType = value;
 				Objects = _Objects.OfType(selectedType);
 
+				var properties = selectedType.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+				var columns = properties.Select(p => new DataGridTextColumn { Header = p.Name, Binding = new Binding(p.Name) }).ToList();
+				Columns.Clear();
+				foreach (var column in columns) Columns.Add(column);
+
 				Changed(() => Objects);
 				New.RaiseCanExecuteChanged();
 				Delete.RaiseCanExecuteChanged();
 			}
 		}
 
-		public ObservableCollection<object> Objects { get; set; }
-		object selectedObject;
-		public object SelectedObject
+		public ObservableCollection<DataGridColumn> Columns { get; private set;}
+
+		public ObservableCollection<ObjectProxy> Objects { get; set; }
+		ObjectProxy selectedObject;
+		public ObjectProxy SelectedObject
 		{
 			get
 			{
@@ -69,7 +87,7 @@ namespace JustObjectsPrototype.UI
 				selectedObject = value;
 				if (selectedObject != null)
 				{
-					var type = selectedObject.GetType();
+					var type = selectedObject.ProxiedObject.GetType();
 					var properties = type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
 					var propertiesViewModels = from property in properties
 											   select new TextPropertyViewModel(selectedObject, property);

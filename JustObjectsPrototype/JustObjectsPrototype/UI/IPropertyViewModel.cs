@@ -10,11 +10,10 @@ namespace JustObjectsPrototype.UI
 
 	public class TextPropertyViewModel : IPropertyViewModel
 	{
-		object _Instance;
+		ObjectProxy _Instance;
 		PropertyInfo _Property;
-		Action _ChangeCallback;
 
-		public TextPropertyViewModel(object instance, PropertyInfo property, Action changeCallback = null)
+		public TextPropertyViewModel(ObjectProxy instance, PropertyInfo property)
 		{
 			_Instance = instance;
 			_Property = property;
@@ -24,11 +23,14 @@ namespace JustObjectsPrototype.UI
 
 		public string Value
 		{
-			get { return (_Property.GetValue(_Instance) ?? "").ToString(); }
+			get
+			{
+				return (_Property.GetValue(_Instance.ProxiedObject) ?? "").ToString();
+			}
 			set
 			{
-				_Property.SetValue(_Instance, value);
-				if (_ChangeCallback != null) _ChangeCallback();
+				_Property.SetValue(_Instance.ProxiedObject, value);
+				_Instance.RaisePropertyChanged(_Property.Name);
 			}
 		}
 	}

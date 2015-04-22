@@ -50,8 +50,10 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ObjectProxy.cs" />
     <Compile Include="UI\Command.cs" />
     <Compile Include="Objects.cs" />
+    <Compile Include="UI\DataGridColumnsBehavior.cs" />
     <Compile Include="UI\IPropertyViewModel.cs" />
     <Compile Include="UI\ViewModel.cs" />
     <Page Include="UI\MainWindow.xaml">

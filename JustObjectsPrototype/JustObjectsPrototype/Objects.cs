@@ -11,7 +11,8 @@ namespace JustObjectsPrototype
 		ICollection<object> _Objects;
 
 		ObservableCollection<Type> _Types;
-		Dictionary<Type, ObservableCollection<object>> _ObjectsByTypes;
+		Dictionary<Type, ObservableCollection<ObjectProxy>> _ObjectsByTypes;
+		Dictionary<object, ObjectProxy> _ObjectToProxy;
 
 		public Objects(ICollection<object> objects)
 		{
@@ -21,10 +22,12 @@ namespace JustObjectsPrototype
 				((ObservableCollection<object>)_Objects).CollectionChanged += objectlist_CollectionChanged;
 			}
 
+			_ObjectToProxy = objects.ToDictionary(o => o, o => new ObjectProxy(o));
+
 			var objectsByType = objects.ToLookup(o => o.GetType());
 			var typesAndObjects = objectsByType.Select(t => t.Key).ToDictionary(t => t, t =>
 			{
-				var observableCollection = new ObservableCollection<object>(objectsByType[t]);
+				var observableCollection = new ObservableCollection<ObjectProxy>(objectsByType[t].Select(o => _ObjectToProxy[o]));
 				observableCollection.CollectionChanged += typedictionaryobjectlist_CollectionChanged;
 				return observableCollection;
 			});
@@ -43,11 +46,11 @@ namespace JustObjectsPrototype
 			get { return _Objects; }
 		}
 
-		public ObservableCollection<object> OfType(Type type)
+		public ObservableCollection<ObjectProxy> OfType(Type type)
 		{
 			if (_ObjectsByTypes.ContainsKey(type) == false)
 			{
-				var observableCollection = new ObservableCollection<object>();
+				var observableCollection = new ObservableCollection<ObjectProxy>();
 				observableCollection.CollectionChanged += typedictionaryobjectlist_CollectionChanged;
 
 				_ObjectsByTypes.Add(type, observableCollection);
@@ -66,12 +69,15 @@ namespace JustObjectsPrototype
 					var type = newItem.GetType();
 					if (_ObjectsByTypes.ContainsKey(type) == false)
 					{
-						_ObjectsByTypes.Add(type, new ObservableCollection<object>());
+						_ObjectsByTypes.Add(type, new ObservableCollection<ObjectProxy>());
 						_Types.Add(type);
 					}
-					if (_ObjectsByTypes[type].Contains(newItem) == false)
+					if (_ObjectToProxy.ContainsKey(newItem) == false)
 					{
-						_ObjectsByTypes[type].Add(newItem);
+						var newProxy = new ObjectProxy(newItem);
+						_ObjectToProxy.Add(newItem, newProxy);
+
+						_ObjectsByTypes[type].Add(newProxy);
 					}
 				}
 			}
@@ -80,9 +86,12 @@ namespace JustObjectsPrototype
 				foreach (var oldItem in e.OldItems)
 				{
 					var type = oldItem.GetType();
-					if (_ObjectsByTypes.ContainsKey(type) == true && _ObjectsByTypes[type].Contains(oldItem) == true)
+					if (_ObjectsByTypes.ContainsKey(type) == true && _ObjectToProxy.ContainsKey(oldItem) == true)
 					{
-						_ObjectsByTypes[type].Remove(oldItem);
+						var oldProxy = _ObjectToProxy[oldItem];
+						_ObjectToProxy.Remove(oldItem);
+
+						_ObjectsByTypes[type].Remove(oldProxy);
 					}
 				}
 			}
@@ -90,24 +99,32 @@ namespace JustObjectsPrototype
 
 		void typedictionaryobjectlist_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
-			var observableCollection = sender as ObservableCollection<object>;
+			var observableCollection = sender as ObservableCollection<ObjectProxy>;
 			if (e.Action == NotifyCollectionChangedAction.Add)
 			{
-				foreach (var newItem in e.NewItems)
+				foreach (var newItem in e.NewItems.Cast<ObjectProxy>())
 				{
-					if (_Objects.Contains(newItem) == false)
+					if (_ObjectToProxy.ContainsKey(newItem.ProxiedObject) == false)
 					{
-						_Objects.Add(newItem);
+						_ObjectToProxy.Add(newItem.ProxiedObject, newItem);
+					}
+					if (_Objects.Contains(newItem.ProxiedObject) == false)
+					{
+						_Objects.Add(newItem.ProxiedObject);
 					}
 				}
 			}
 			if (e.Action == NotifyCollectionChangedAction.Remove)
 			{
-				foreach (var oldItem in e.OldItems)
+				foreach (var oldItem in e.OldItems.Cast<ObjectProxy>())
 				{
-					if (_Objects.Contains(oldItem) == true)
+					if (_ObjectToProxy.ContainsKey(oldItem.ProxiedObject) == true)
 					{
-						_Objects.Remove(oldItem);
+						_ObjectToProxy.Remove(oldItem.ProxiedObject);
+					}
+					if (_Objects.Contains(oldItem.ProxiedObject) == true)
+					{
+						_Objects.Remove(oldItem.ProxiedObject);
 					}
 				}
 			}
