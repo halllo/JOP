@@ -64,7 +64,7 @@
 		</DataGrid>
 
 		<ScrollViewer Grid.Column="1" Grid.Row="2" Background="GhostWhite">
-			<ItemsControl ItemsSource="{Binding Properties}" Padding="20">
+			<ItemsControl ItemsSource="{Binding Properties}" Padding="20" Focusable="True" TabIndex="9999">
 				<ItemsControl.ItemsPanel>
 					<ItemsPanelTemplate>
 						<StackPanel Orientation="Vertical"/>

@@ -16,10 +16,10 @@ namespace JustObjectsPrototype
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
-		internal void RaisePropertyChanged(string propertyName)
+		public void RaisePropertyChanged(string propertyName)
 		{
 			if (PropertyChanged != null)
-				PropertyChanged(ProxiedObject, new PropertyChangedEventArgs(propertyName));
+				PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 		}
 	
 		public override bool TryConvert(ConvertBinder binder, out object result)
