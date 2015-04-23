@@ -37,7 +37,28 @@ namespace JustObjectsPrototype.UI
 
 	public class ReferencePropertyViewModel : IPropertyViewModel
 	{
-		public string Label { get; set; }
-		public object Reference { get; set; }
+		ObjectProxy _Instance;
+		PropertyInfo _Property;
+
+		public ReferencePropertyViewModel(ObjectProxy instance, PropertyInfo property)
+		{
+			_Instance = instance;
+			_Property = property;
+		}
+
+		public string Label { get { return _Property.Name; } }
+
+		public string Value
+		{
+			get
+			{
+				return (_Property.GetValue(_Instance.ProxiedObject) ?? "").ToString();
+			}
+			set
+			{
+				_Property.SetValue(_Instance.ProxiedObject, value);
+				_Instance.RaisePropertyChanged(_Property.Name);
+			}
+		}
 	}
 }

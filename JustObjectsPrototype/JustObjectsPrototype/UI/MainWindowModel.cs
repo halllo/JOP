@@ -14,12 +14,10 @@ namespace JustObjectsPrototype.UI
 
 		public MainWindowModel(ICollection<object> objects, List<Type> types = null)
 		{
-			//TODO: WrapDirection in proxies with INotifyPropertyChanged
-			//http://www.codeproject.com/Articles/100710/Using-DynamicObject-to-Implement-General-Proxy-Cla
-			//http://stackoverflow.com/questions/320089/how-do-i-bind-a-wpf-datagrid-to-a-variable-number-of-columns/4379965#4379965
-
-
-
+			//TODO: 
+			//1. object reference property changer
+			//2. number & datetime property changer
+			//3. object functionality ribbon
 
 			_Objects = new Objects(objects);
 
@@ -72,7 +70,7 @@ namespace JustObjectsPrototype.UI
 			}
 		}
 
-		public ObservableCollection<DataGridColumn> Columns { get; private set;}
+		public ObservableCollection<DataGridColumn> Columns { get; private set; }
 
 		public ObservableCollection<ObjectProxy> Objects { get; set; }
 		ObjectProxy selectedObject;
@@ -90,7 +88,9 @@ namespace JustObjectsPrototype.UI
 					var type = selectedObject.ProxiedObject.GetType();
 					var properties = type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
 					var propertiesViewModels = from property in properties
-											   select new TextPropertyViewModel(selectedObject, property);
+											   select property.PropertyType == typeof(string) ? (IPropertyViewModel)new TextPropertyViewModel(selectedObject, property)
+													: property.PropertyType == typeof(decimal) ? (IPropertyViewModel)new TextPropertyViewModel(selectedObject, property)
+													: (IPropertyViewModel)new ReferencePropertyViewModel(selectedObject, property);
 
 					Properties = propertiesViewModels.ToList<IPropertyViewModel>();
 				}

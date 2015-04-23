@@ -82,7 +82,14 @@
 						</Grid>
 					</DataTemplate>
 					<DataTemplate DataType="{x:Type local:ReferencePropertyViewModel}">
-						<TextBlock Text="{Binding Label}" Foreground="Blue" Margin="10,10,0,10"/>
+						<Grid Margin="10,10,0,10">
+							<Grid.RowDefinitions>
+								<RowDefinition/>
+								<RowDefinition/>
+							</Grid.RowDefinitions>
+							<TextBlock Grid.Row="0" Text="{Binding Label}" Foreground="Blue"/>
+							<TextBox Grid.Row="1" Text="[reference]" IsReadOnly="True"/>
+						</Grid>
 					</DataTemplate>
 				</ItemsControl.Resources>
 			</ItemsControl>
