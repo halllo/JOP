@@ -15,7 +15,7 @@ namespace JustObjectsPrototype.UI
 		public MainWindowModel(ICollection<object> objects, List<Type> types = null)
 		{
 			//TODO: 
-			//1. object reference property changer
+			//1. object reference property changer with no ToString
 			//2. number & datetime property changer
 			//3. object functionality ribbon
 
@@ -89,8 +89,8 @@ namespace JustObjectsPrototype.UI
 					var properties = type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
 					var propertiesViewModels = from property in properties
 											   select property.PropertyType == typeof(string) ? (IPropertyViewModel)new TextPropertyViewModel(selectedObject, property)
-													: property.PropertyType == typeof(decimal) ? (IPropertyViewModel)new TextPropertyViewModel(selectedObject, property)
-													: (IPropertyViewModel)new ReferencePropertyViewModel(selectedObject, property);
+													: _Objects.Types.Contains(property.PropertyType) ? (IPropertyViewModel)new ReferencePropertyViewModel(selectedObject, property, _Objects.OfType(property.PropertyType).Select(o => o.ProxiedObject))
+													: (IPropertyViewModel)new DisplayPropertyViewModel(selectedObject, property);
 
 					Properties = propertiesViewModels.ToList<IPropertyViewModel>();
 				}
