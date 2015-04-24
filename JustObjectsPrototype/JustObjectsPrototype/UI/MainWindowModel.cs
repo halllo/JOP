@@ -15,9 +15,8 @@ namespace JustObjectsPrototype.UI
 		public MainWindowModel(ICollection<object> objects, List<Type> types = null)
 		{
 			//TODO: 
-			//1. object reference property changer with no ToString
-			//2. number & datetime property changer
-			//3. object functionality ribbon
+			//1. number & datetime property changer
+			//2. object functionality ribbon
 
 			_Objects = new Objects(objects);
 

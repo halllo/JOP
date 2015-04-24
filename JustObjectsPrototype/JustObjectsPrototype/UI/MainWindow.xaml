@@ -87,8 +87,14 @@
 								<RowDefinition/>
 								<RowDefinition/>
 							</Grid.RowDefinitions>
-							<TextBlock Grid.Row="0" Text="{Binding Label}" Foreground="Blue"/>
-							<ComboBox Grid.Row="1" ItemsSource="{Binding References}" SelectedItem="{Binding Reference}"/>
+							<TextBlock Grid.Row="0" Text="{Binding Label}" Foreground="Gray"/>
+							<ComboBox Grid.Row="1" ItemsSource="{Binding References}" SelectedItem="{Binding Reference}">
+								<ComboBox.ItemTemplate>
+									<DataTemplate>
+										<local:ObjectDisplay DisplayObject="{Binding}"/>
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+							</ComboBox>
 						</Grid>
 					</DataTemplate>
 					<DataTemplate DataType="{x:Type local:DisplayPropertyViewModel}">

@@ -67,8 +67,9 @@ namespace JustObjectsPrototype.UI
 		ObjectProxy _Instance;
 		PropertyInfo _Property;
 		
-		object _NullEntry = " ";
 		IEnumerable<object> _Objects;
+
+		public static object NullEntry = " ";
 
 		public ReferencePropertyViewModel(ObjectProxy instance, PropertyInfo property, IEnumerable<object> objects)
 		{
@@ -84,7 +85,7 @@ namespace JustObjectsPrototype.UI
 		{
 			get
 			{
-				return Enumerable.Concat(new[] { _NullEntry }, _Objects);
+				return Enumerable.Concat(new[] { NullEntry }, _Objects);
 			}
 		}
 
@@ -96,7 +97,7 @@ namespace JustObjectsPrototype.UI
 			}
 			set
 			{
-				if (value == _NullEntry) value = null;
+				if (value == NullEntry) value = null;
 
 				_Property.SetValue(_Instance.ProxiedObject, value);
 				_Instance.RaisePropertyChanged(_Property.Name);
