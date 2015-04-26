@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -15,7 +15,7 @@ namespace JustObjectsPrototype.UI
 		public MainWindowModel(ICollection<object> objects, List<Type> types = null)
 		{
 			//TODO: 
-			//1. number & datetime property changer
+			//1. list of simple and reference types
 			//2. object functionality ribbon
 
 			_Objects = new Objects(objects);
@@ -33,6 +33,7 @@ namespace JustObjectsPrototype.UI
 					var newProxy = new ObjectProxy(newObject);
 					Objects.Add(newProxy);
 					SelectedObject = newProxy;
+					Changed(() => SelectedObject);
 				},
 				canExecute: () => SelectedType != null);
 			Delete = new Command(
@@ -87,11 +88,12 @@ namespace JustObjectsPrototype.UI
 					var type = selectedObject.ProxiedObject.GetType();
 					var properties = type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
 					var propertiesViewModels = from property in properties
-											   select property.PropertyType == typeof(string) ? (IPropertyViewModel)new TextPropertyViewModel(selectedObject, property)
-													: _Objects.Types.Contains(property.PropertyType) ? (IPropertyViewModel)new ReferencePropertyViewModel(selectedObject, property, _Objects.OfType(property.PropertyType).Select(o => o.ProxiedObject))
-													: (IPropertyViewModel)new DisplayPropertyViewModel(selectedObject, property);
+											   select property.CanRead && _Objects.Types.Contains(property.PropertyType) ?	(IPropertyViewModel)new ReferenceTypePropertyViewModel { Instance = selectedObject, Property = property, Objects = _Objects.OfType(property.PropertyType).Select(o => o.ProxiedObject) }
+													: property.CanRead && property.PropertyType == typeof(DateTime) ?		(IPropertyViewModel)new DateTimePropertyViewModel { Instance = selectedObject, Property = property }
+													: property.CanRead ?													(IPropertyViewModel)new SimpleTypePropertyViewModel { Instance = selectedObject, Property = property }
+													: null;
 
-					Properties = propertiesViewModels.ToList<IPropertyViewModel>();
+					Properties = propertiesViewModels.Where(p => p != null).ToList<IPropertyViewModel>();
 				}
 				else
 				{

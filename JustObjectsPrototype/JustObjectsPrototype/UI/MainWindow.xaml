@@ -71,40 +71,40 @@
 					</ItemsPanelTemplate>
 				</ItemsControl.ItemsPanel>
 				<ItemsControl.Resources>
-					<DataTemplate DataType="{x:Type local:TextPropertyViewModel}">
+					<DataTemplate DataType="{x:Type local:SimpleTypePropertyViewModel}">
 						<Grid Margin="10,10,0,10">
 							<Grid.RowDefinitions>
 								<RowDefinition/>
 								<RowDefinition/>
 							</Grid.RowDefinitions>
 							<TextBlock Grid.Row="0" Text="{Binding Label}" Foreground="Gray"/>
-							<TextBox Grid.Row="1" Text="{Binding Value}" AcceptsReturn="True"/>
+							<TextBox Grid.Row="1" Text="{Binding Value}" IsEnabled="{Binding CanWrite}" AcceptsReturn="True"/>
 						</Grid>
 					</DataTemplate>
-					<DataTemplate DataType="{x:Type local:ReferencePropertyViewModel}">
+					<DataTemplate DataType="{x:Type local:DateTimePropertyViewModel}">
 						<Grid Margin="10,10,0,10">
 							<Grid.RowDefinitions>
 								<RowDefinition/>
 								<RowDefinition/>
 							</Grid.RowDefinitions>
 							<TextBlock Grid.Row="0" Text="{Binding Label}" Foreground="Gray"/>
-							<ComboBox Grid.Row="1" ItemsSource="{Binding References}" SelectedItem="{Binding Reference}">
+							<DatePicker Grid.Row="1" SelectedDate="{Binding Value}" IsEnabled="{Binding CanWrite}"/>
+						</Grid>
+					</DataTemplate>
+					<DataTemplate DataType="{x:Type local:ReferenceTypePropertyViewModel}">
+						<Grid Margin="10,10,0,10">
+							<Grid.RowDefinitions>
+								<RowDefinition/>
+								<RowDefinition/>
+							</Grid.RowDefinitions>
+							<TextBlock Grid.Row="0" Text="{Binding Label}" Foreground="Gray"/>
+							<ComboBox Grid.Row="1" ItemsSource="{Binding References}" SelectedItem="{Binding Reference}" IsEnabled="{Binding CanWrite}">
 								<ComboBox.ItemTemplate>
 									<DataTemplate>
 										<local:ObjectDisplay DisplayObject="{Binding}"/>
 									</DataTemplate>
 								</ComboBox.ItemTemplate>
 							</ComboBox>
-						</Grid>
-					</DataTemplate>
-					<DataTemplate DataType="{x:Type local:DisplayPropertyViewModel}">
-						<Grid Margin="10,10,0,10">
-							<Grid.RowDefinitions>
-								<RowDefinition/>
-								<RowDefinition/>
-							</Grid.RowDefinitions>
-							<TextBlock Grid.Row="0" Text="{Binding Label}" Foreground="Gray"/>
-							<TextBlock Grid.Row="1" Text="{Binding Value}"/>
 						</Grid>
 					</DataTemplate>
 				</ItemsControl.Resources>

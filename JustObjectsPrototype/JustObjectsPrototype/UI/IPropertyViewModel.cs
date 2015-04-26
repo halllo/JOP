@@ -10,82 +10,65 @@ namespace JustObjectsPrototype.UI
 		string Label { get; }
 	}
 
-	public class DisplayPropertyViewModel : IPropertyViewModel
+	public class DateTimePropertyViewModel : SimpleTypePropertyViewModel { }
+
+	public class SimpleTypePropertyViewModel : IPropertyViewModel
 	{
-		ObjectProxy _Instance;
-		PropertyInfo _Property;
+		public ObjectProxy Instance { private get; set; }
+		public PropertyInfo Property { private get; set; }
+		public Action ChangeCallback { private get; set; }
 		
-		public DisplayPropertyViewModel(ObjectProxy instance, PropertyInfo property)
+		public bool CanWrite
 		{
-			_Instance = instance;
-			_Property = property;
+			get { return Property.CanWrite; }
 		}
 
-		public string Label { get { return _Property.Name; } }
+		public string Label { get { return Property.Name; } }
 
-		public string Value
+		public object Value
 		{
 			get
 			{
-				return (_Property.GetValue(_Instance.ProxiedObject) ?? "").ToString();
-			}
-		}
-	}
-
-	public class TextPropertyViewModel : IPropertyViewModel
-	{
-		ObjectProxy _Instance;
-		PropertyInfo _Property;
-		Action _ChangeCallback;
-
-		public TextPropertyViewModel(ObjectProxy instance, PropertyInfo property, Action changeCallback = null)
-		{
-			_Instance = instance;
-			_Property = property;
-			_ChangeCallback = changeCallback;
-		}
-
-		public string Label { get { return _Property.Name; } }
-
-		public string Value
-		{
-			get
-			{
-				return (_Property.GetValue(_Instance.ProxiedObject) ?? "").ToString();
+				return Property.GetValue(Instance.ProxiedObject);
 			}
 			set
 			{
-				_Property.SetValue(_Instance.ProxiedObject, value);
-				_Instance.RaisePropertyChanged(_Property.Name);
-				if (_ChangeCallback != null) _ChangeCallback();
+				try
+				{
+					var convertedValue = Convert.ChangeType(value, Property.PropertyType);
+					Property.SetValue(Instance.ProxiedObject, convertedValue);
+					Instance.RaisePropertyChanged(Property.Name);
+					if (ChangeCallback != null) ChangeCallback();
+				}
+				catch (Exception e)
+				{
+					System.Windows.MessageBox.Show("Conversion error: " + e.Message);
+				}
 			}
 		}
 	}
 
-	public class ReferencePropertyViewModel : IPropertyViewModel
+	public class ReferenceTypePropertyViewModel : IPropertyViewModel
 	{
-		ObjectProxy _Instance;
-		PropertyInfo _Property;
-		
-		IEnumerable<object> _Objects;
-
 		public static object NullEntry = " ";
 
-		public ReferencePropertyViewModel(ObjectProxy instance, PropertyInfo property, IEnumerable<object> objects)
-		{
-			_Instance = instance;
-			_Property = property;
+		public ObjectProxy Instance { private get; set; }
+		public PropertyInfo Property { private get; set; }
+		public IEnumerable<object> Objects { private get; set; }
+		public Action ChangeCallback { private get; set; }
 
-			_Objects = objects;
+		public bool CanWrite
+		{
+			get { return Property.CanWrite; }
 		}
 
-		public string Label { get { return _Property.Name; } }
+		public string Label { get { return Property.Name; } }
 
 		public IEnumerable<object> References
 		{
 			get
 			{
-				return Enumerable.Concat(new[] { NullEntry }, _Objects);
+				return Enumerable.Concat(new[] { NullEntry, Reference }, Objects).Distinct();
 			}
 		}
 
@@ -93,14 +76,14 @@ namespace JustObjectsPrototype.UI
 		{
 			get
 			{
-				return _Property.GetValue(_Instance.ProxiedObject);
+				return Property.GetValue(Instance.ProxiedObject);
 			}
 			set
 			{
 				if (value == NullEntry) value = null;
 
-				_Property.SetValue(_Instance.ProxiedObject, value);
-				_Instance.RaisePropertyChanged(_Property.Name);
+				Property.SetValue(Instance.ProxiedObject, value);
+				Instance.RaisePropertyChanged(Property.Name);
 			}
 		}
 	}

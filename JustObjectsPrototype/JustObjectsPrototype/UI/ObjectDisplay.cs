@@ -18,7 +18,7 @@ namespace JustObjectsPrototype.UI
 		private static void DisplayObjectChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e) 
 		{
 			var od = sender as ObjectDisplay;
-			if (e.NewValue == null || (e.NewValue != null && e.NewValue == ReferencePropertyViewModel.NullEntry))
+			if (e.NewValue == null || (e.NewValue != null && e.NewValue == ReferenceTypePropertyViewModel.NullEntry))
 				return;
 
 			od.Text = ToStringOrJson(e.NewValue);
