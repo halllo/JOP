@@ -68,7 +68,7 @@ namespace JustObjectsPrototype.UI
 		{
 			get
 			{
-				return Enumerable.Concat(new[] { NullEntry, Reference }, Objects).Distinct();
+				return Enumerable.Concat(new[] { NullEntry, Reference ?? NullEntry }, Objects).Distinct();
 			}
 		}
 
