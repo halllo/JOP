@@ -20,6 +20,8 @@ namespace Domain
 	{
 		public Kunde Empfänger { get; set; }
 		public decimal Betrag { get; set; }
+		public IEnumerable<string> Strings { get; set; }
+		public IEnumerable<decimal> Decimals { get; set; }
 	}
 
 	public class Kunde

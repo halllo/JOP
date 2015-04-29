@@ -54,8 +54,11 @@
     <Compile Include="UI\Command.cs" />
     <Compile Include="Objects.cs" />
     <Compile Include="UI\DataGridColumnsBehavior.cs" />
-    <Compile Include="UI\IPropertyViewModel.cs" />
-    <Compile Include="UI\ObjectDisplay.cs" />
+    <Compile Include="UI\Editors\IPropertyViewModel.cs" />
+    <Compile Include="UI\Editors\ReferenceTypePropertyViewModel.cs" />
+    <Compile Include="UI\Editors\SimpleTypeListPropertyViewModel.cs" />
+    <Compile Include="UI\Editors\SimpleTypePropertyViewModel.cs" />
+    <Compile Include="UI\Editors\ObjectDisplay.cs" />
     <Compile Include="UI\ViewModel.cs" />
     <Page Include="UI\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

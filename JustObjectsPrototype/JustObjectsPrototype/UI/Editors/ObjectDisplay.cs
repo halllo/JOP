@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace JustObjectsPrototype.UI
+namespace JustObjectsPrototype.UI.Editors
 {
 	public class ObjectDisplay : TextBlock
 	{

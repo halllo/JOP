@@ -17,7 +17,12 @@ namespace JustObjectsPrototype
 				new Domain.Akte { Name = "Akte 3" },
 				new Domain.Kunde { Vorname = "Manuel", Nachname = "Naujoks"},
 				new Domain.Rechnung { Betrag = 20.00m },
-				new Domain.Rechnung { Betrag = 150.00m, Empfänger = new Domain.Kunde { Nachname = "Müller"} },
+				new Domain.Rechnung { 
+					Betrag = 150.00m, 
+					Empfänger = new Domain.Kunde { Nachname = "Müller"}, 
+					Strings = new List<string> { "Hallo", "Welt" },
+					Decimals = new List<decimal> { 3.5m, 3.3333m },
+				},
 			};
 
 			var window = new MainWindow

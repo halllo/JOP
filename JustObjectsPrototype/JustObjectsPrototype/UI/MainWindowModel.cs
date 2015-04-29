@@ -1,4 +1,6 @@
-﻿using System;
+﻿using JustObjectsPrototype.UI.Editors;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -15,7 +17,7 @@ namespace JustObjectsPrototype.UI
 		public MainWindowModel(ICollection<object> objects, List<Type> types = null)
 		{
 			//TODO: 
-			//1. list of simple and reference types
+			//1. list of reference types
 			//2. object functionality ribbon
 
 			_Objects = new Objects(objects);
@@ -88,9 +90,11 @@ namespace JustObjectsPrototype.UI
 					var type = selectedObject.ProxiedObject.GetType();
 					var properties = type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
 					var propertiesViewModels = from property in properties
-											   select property.CanRead && _Objects.Types.Contains(property.PropertyType) ?	(IPropertyViewModel)new ReferenceTypePropertyViewModel { Instance = selectedObject, Property = property, Objects = _Objects.OfType(property.PropertyType).Select(o => o.ProxiedObject) }
-													: property.CanRead && property.PropertyType == typeof(DateTime) ?		(IPropertyViewModel)new DateTimePropertyViewModel { Instance = selectedObject, Property = property }
-													: property.CanRead ?													(IPropertyViewModel)new SimpleTypePropertyViewModel { Instance = selectedObject, Property = property }
+											   select property.CanRead && _Objects.Types.Contains(property.PropertyType) ?						(IPropertyViewModel)new ReferenceTypePropertyViewModel { Instance = selectedObject, Property = property, Objects = _Objects.OfType(property.PropertyType).Select(o => o.ProxiedObject) }
+													: property.CanRead && property.PropertyType == typeof(DateTime) ?							(IPropertyViewModel)new DateTimePropertyViewModel { Instance = selectedObject, Property = property }
+													: property.CanRead && property.PropertyType == typeof(string) ?								(IPropertyViewModel)new SimpleTypePropertyViewModel { Instance = selectedObject, Property = property }
+													: property.CanRead && property.PropertyType.GetInterfaces().Contains(typeof(IEnumerable)) ?	(IPropertyViewModel)new SimpleTypeListPropertyViewModel { Instance = selectedObject, Property = property }
+													: property.CanRead ?																		(IPropertyViewModel)new SimpleTypePropertyViewModel { Instance = selectedObject, Property = property }
 													: null;
 
 					Properties = propertiesViewModels.Where(p => p != null).ToList<IPropertyViewModel>();
@@ -104,7 +108,6 @@ namespace JustObjectsPrototype.UI
 				Delete.RaiseCanExecuteChanged();
 			}
 		}
-
 
 		public List<string> Functions { get; set; }
 		public List<IPropertyViewModel> Properties { get; set; }
