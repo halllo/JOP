@@ -132,6 +132,29 @@
 							</ComboBox>
 						</Grid>
 					</DataTemplate>
+					<DataTemplate DataType="{x:Type localEditors:ReferenceTypeListPropertyViewModel}">
+						<Grid Margin="10,10,0,10">
+							<Grid.RowDefinitions>
+								<RowDefinition/>
+								<RowDefinition/>
+							</Grid.RowDefinitions>
+							<TextBlock Grid.Row="0" Text="{Binding Label}" Foreground="Gray"/>
+							<DataGrid Grid.Row="1" Style="{StaticResource GrayGridLines}" IsEnabled="{Binding CanWrite}"
+									  ItemsSource="{Binding Value}" AutoGenerateColumns="False">
+								<DataGrid.Columns>
+									<DataGridTextColumn Header="ToString" Binding="{Binding Value}" />
+									<DataGridTemplateColumn Header="">
+										<DataGridTemplateColumn.CellTemplate>
+											<DataTemplate>
+												<TextBox Text="{Binding Value2,Mode=TwoWay}"/>
+												<!--<ComboBox ItemsSource="{Binding References}" SelectedItem="{Binding Value2}" />-->
+											</DataTemplate>
+										</DataGridTemplateColumn.CellTemplate>
+									</DataGridTemplateColumn>
+								</DataGrid.Columns>
+							</DataGrid>
+						</Grid>
+					</DataTemplate>
 				</ItemsControl.Resources>
 			</ItemsControl>
 		</ScrollViewer>

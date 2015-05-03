@@ -55,6 +55,7 @@
     <Compile Include="Objects.cs" />
     <Compile Include="UI\DataGridColumnsBehavior.cs" />
     <Compile Include="UI\Editors\IPropertyViewModel.cs" />
+    <Compile Include="UI\Editors\ReferenceTypeListPropertyViewModel.cs" />
     <Compile Include="UI\Editors\ReferenceTypePropertyViewModel.cs" />
     <Compile Include="UI\Editors\SimpleTypeListPropertyViewModel.cs" />
     <Compile Include="UI\Editors\SimpleTypePropertyViewModel.cs" />

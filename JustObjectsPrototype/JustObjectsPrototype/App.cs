@@ -15,7 +15,14 @@ namespace JustObjectsPrototype
 				new Domain.Akte { Name = "Akte 1" },
 				new Domain.Akte { Name = "Akte 2" },
 				new Domain.Akte { Name = "Akte 3" },
-				new Domain.Kunde { Vorname = "Manuel", Nachname = "Naujoks"},
+				new Domain.Kunde { 
+					Vorname = "Manuel", 
+					Nachname = "Naujoks", 
+					Freunde = new List<Domain.Kunde> {
+						new Domain.Kunde { Vorname = "Tester1", Nachname ="Test1"},
+						new Domain.Kunde { Vorname = "Tester2", Nachname ="Test2"},
+					}
+				},
 				new Domain.Rechnung { Betrag = 20.00m },
 				new Domain.Rechnung { 
 					Betrag = 150.00m, 
