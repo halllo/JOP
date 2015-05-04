@@ -101,7 +101,7 @@
 							<DataGrid Grid.Row="1" Style="{StaticResource GrayGridLines}" IsEnabled="{Binding CanWrite}"
 									  ItemsSource="{Binding Value}" AutoGenerateColumns="False">
 								<DataGrid.Columns>
-									<DataGridTextColumn Header="" Binding="{Binding Value}" />
+									<DataGridTextColumn Header="{x:Null}" Binding="{Binding Value}" />
 								</DataGrid.Columns>
 							</DataGrid>
 						</Grid>
@@ -138,21 +138,41 @@
 								<RowDefinition/>
 								<RowDefinition/>
 							</Grid.RowDefinitions>
-							<TextBlock Grid.Row="0" Text="{Binding Label}" Foreground="Gray"/>
-							<DataGrid Grid.Row="1" Style="{StaticResource GrayGridLines}" IsEnabled="{Binding CanWrite}"
-									  ItemsSource="{Binding Value}" AutoGenerateColumns="False">
-								<DataGrid.Columns>
-									<DataGridTextColumn Header="ToString" Binding="{Binding Value}" />
-									<DataGridTemplateColumn Header="">
-										<DataGridTemplateColumn.CellTemplate>
-											<DataTemplate>
-												<TextBox Text="{Binding Value2,Mode=TwoWay}"/>
-												<!--<ComboBox ItemsSource="{Binding References}" SelectedItem="{Binding Value2}" />-->
-											</DataTemplate>
-										</DataGridTemplateColumn.CellTemplate>
-									</DataGridTemplateColumn>
-								</DataGrid.Columns>
-							</DataGrid>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Grid.Row="0" Text="{Binding Label}" Foreground="Gray"/>
+								<Button Grid.Row="0" Grid.Column="1" BorderThickness="0" Background="Transparent"
+										Command="{Binding AddReference}">
+									<Button.Content>
+										<Image Source="Resources/add182.png" Height="15"/>
+									</Button.Content>
+								</Button>
+							</StackPanel>
+							<ListBox Grid.Row="1" Grid.ColumnSpan="2" IsEnabled="{Binding CanWrite}"
+									 ItemsSource="{Binding Value}" HorizontalContentAlignment="Stretch">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<Grid>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition/>
+												<ColumnDefinition Width="Auto"/>
+											</Grid.ColumnDefinitions>
+											<Button Grid.Column="1" BorderThickness="0" Background="Transparent"
+													Command="{Binding RemoveReference}">
+												<Button.Content>
+													<Image Source="Resources/cross108.png" Height="15"/>
+												</Button.Content>
+											</Button>
+											<ComboBox ItemsSource="{Binding References}" SelectedItem="{Binding Value}">
+												<ComboBox.ItemTemplate>
+													<DataTemplate>
+														<localEditors:ObjectDisplay DisplayObject="{Binding}"/>
+													</DataTemplate>
+												</ComboBox.ItemTemplate>
+											</ComboBox>
+										</Grid>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
 						</Grid>
 					</DataTemplate>
 				</ItemsControl.Resources>

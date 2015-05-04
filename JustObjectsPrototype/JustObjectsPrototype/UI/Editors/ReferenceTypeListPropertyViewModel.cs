@@ -32,7 +32,7 @@ namespace JustObjectsPrototype.UI.Editors
 					Enumerable.Concat
 					(
 						new[] { NullEntry },
-						((IEnumerable)Property.GetValue(Instance.ProxiedObject)).OfType<object>()
+						((IEnumerable)Property.GetValue(Instance.ProxiedObject) ?? Enumerable.Empty<object>()).OfType<object>()
 					),
 					Objects
 				).Distinct();
@@ -40,8 +40,33 @@ namespace JustObjectsPrototype.UI.Editors
 			}
 		}
 
+		Command addReference;
+		public Command AddReference
+		{
+			get
+			{
+				if (addReference == null)
+				{
+					addReference = new Command(() => collection.Add(new ReferenceTypeWrapper
+					{
+						Value = NullEntry,
+						References = References,
+						ValueChanged = Assign,
+						RemoveRequest = RemoveReference
+					}));
+				}
+				return addReference;
+			}
+		}
+
+		private void RemoveReference(ReferenceTypeWrapper item)
+		{
+			collection.Remove(item);
+		}
+
 		public class ReferenceTypeWrapper
 		{
+			public Action<ReferenceTypeWrapper> RemoveRequest { get; set; }
 			public Action ValueChanged { get; set; }
 			object _value;
 			public object Value
@@ -54,13 +79,20 @@ namespace JustObjectsPrototype.UI.Editors
 				}
 			}
 
-			public object Value2
-			{
-				get { return Value.ToString(); }
-				set { string s = value.ToString(); }
-			}
-
 			public object References { get; set; }
+
+			Command removeReference;
+			public Command RemoveReference
+			{
+				get
+				{
+					if (removeReference == null)
+					{
+						removeReference = new Command(() => RemoveRequest(this));
+					}
+					return removeReference;
+				}
+			}
 		}
 
 		ObservableCollection<ReferenceTypeWrapper> collection;
@@ -77,11 +109,12 @@ namespace JustObjectsPrototype.UI.Editors
 					var wrapper = Enumerable.Empty<ReferenceTypeWrapper>();
 					if (values != null)
 					{
-						wrapper = values.OfType<object>().Select(s => new ReferenceTypeWrapper
+						wrapper = values.Cast<object>().Select(s => new ReferenceTypeWrapper
 						{
-							Value = s,
+							Value = s ?? NullEntry,
 							References = References,
-							ValueChanged = Assign
+							ValueChanged = Assign,
+							RemoveRequest = RemoveReference
 						});
 					}
 					collection = new ObservableCollection<ReferenceTypeWrapper>(wrapper);
@@ -106,10 +139,8 @@ namespace JustObjectsPrototype.UI.Editors
 				var list = (IList)Activator.CreateInstance(constructedListType);
 				foreach (var item in collection)
 				{
-					if (item.ValueChanged == null) item.ValueChanged = Assign;
-					if (item.References == null) item.References = References;
 					if (!canBeNull && item.Value == null) continue;
-					list.Add(Convert.ChangeType(item.Value, collectionItemType ?? typeof(object)));
+					list.Add(item.Value == NullEntry ? null : Convert.ChangeType(item.Value, collectionItemType ?? typeof(object)));
 				}
 
 				Property.SetValue(Instance.ProxiedObject, list);

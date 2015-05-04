@@ -12,7 +12,7 @@ namespace JustObjectsPrototype
 		{
 			var objects = new System.Collections.ObjectModel.ObservableCollection<object> 
 			{
-				new Domain.Akte { Name = "Akte 1" },
+				new Domain.Akte { Name = "Akte 1", Datum = DateTime.Now },
 				new Domain.Akte { Name = "Akte 2" },
 				new Domain.Akte { Name = "Akte 3" },
 				new Domain.Kunde { 

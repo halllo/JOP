@@ -18,8 +18,7 @@ namespace JustObjectsPrototype.UI
 		public MainWindowModel(ICollection<object> objects, List<Type> types = null)
 		{
 			//TODO: 
-			//1. list of reference types
-			//2. object functionality ribbon
+			//1. object functionality ribbon
 
 			_Objects = new Objects(objects);
 
@@ -97,7 +96,7 @@ namespace JustObjectsPrototype.UI
 							 : property.CanRead
 									&& property.PropertyType.IsGenericType
 									&& property.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
-									&& _Objects.Types.Contains(property.PropertyType.GetGenericArguments().FirstOrDefault()) ? (IPropertyViewModel)new ReferenceTypeListPropertyViewModel { Instance = selectedObject, Property = property, Objects = _Objects.OfType(property.PropertyType.GetGenericArguments().FirstOrDefault()).Select(o => o.ProxiedObject) }
+									&& _Objects.Types.Contains(property.PropertyType.GetGenericArguments().FirstOrDefault()) ?	(IPropertyViewModel)new ReferenceTypeListPropertyViewModel { Instance = selectedObject, Property = property, Objects = _Objects.OfType(property.PropertyType.GetGenericArguments().FirstOrDefault()).Select(o => o.ProxiedObject) }
 							 : property.CanRead
 									&& property.PropertyType.IsGenericType
 									&& property.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>) ?				(IPropertyViewModel)new SimpleTypeListPropertyViewModel { Instance = selectedObject, Property = property }

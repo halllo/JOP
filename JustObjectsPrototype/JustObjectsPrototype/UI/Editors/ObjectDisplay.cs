@@ -27,8 +27,8 @@ namespace JustObjectsPrototype.UI.Editors
 		public static string ToStringOrJson(object value)
 		{
 			var type = value.GetType();
-			var toString = type.GetMethod("ToString", BindingFlags.DeclaredOnly);
-			if (toString != null)
+			var toString = type.GetMethod("ToString");
+			if (toString.DeclaringType == type)
 			{
 				return toString.Invoke(value, new object[0]).ToString();
 			}

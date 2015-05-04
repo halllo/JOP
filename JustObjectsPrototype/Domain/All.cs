@@ -31,9 +31,9 @@ namespace Domain
 		public Kunde Vertreter { get; set; }
 		public IEnumerable<Kunde> Freunde { get; set; }
 
-		public override string ToString()
-		{
-			return Vorname + " "+ Nachname;
-		}
+		//public override string ToString()
+		//{
+		//	return Vorname + " " + Nachname;
+		//}
 	}
 }
