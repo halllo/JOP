@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9962CF70-00DD-46E1-B721-A2C1FAFE078E}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{235E4BCA-2FF2-42D3-BB1B-AC43E61FC444}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>JustObjectsPrototype</RootNamespace>
-    <AssemblyName>JustObjectsPrototype</AssemblyName>
+    <RootNamespace>JustObjectsPrototype.Sample</RootNamespace>
+    <AssemblyName>JustObjectsPrototype.Sample</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -33,13 +33,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Windows.Controls.Ribbon" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -53,29 +49,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ObjectProxy.cs" />
-    <Compile Include="UI\Command.cs" />
-    <Compile Include="Objects.cs" />
-    <Compile Include="UI\DataGridColumnsBehavior.cs" />
-    <Compile Include="UI\Editors\IPropertyViewModel.cs" />
-    <Compile Include="UI\Editors\ReferenceTypeListPropertyViewModel.cs" />
-    <Compile Include="UI\Editors\ReferenceTypePropertyViewModel.cs" />
-    <Compile Include="UI\Editors\SimpleTypeListPropertyViewModel.cs" />
-    <Compile Include="UI\Editors\SimpleTypePropertyViewModel.cs" />
-    <Compile Include="UI\Editors\ObjectDisplay.cs" />
-    <Compile Include="UI\ViewModel.cs" />
-    <Compile Include="Show.cs" />
-    <Page Include="UI\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="UI\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="UI\MainWindowModel.cs" />
+    <Compile Include="App.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -100,11 +74,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="UI\Resources\add182.png" />
-    <Resource Include="UI\Resources\cross108.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="UI\Resources\marketing8.png" />
+    <ProjectReference Include="..\JustObjectsPrototype\JustObjectsPrototype.csproj">
+      <Project>{9962cf70-00dd-46e1-b721-a2c1fafe078e}</Project>
+      <Name>JustObjectsPrototype</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

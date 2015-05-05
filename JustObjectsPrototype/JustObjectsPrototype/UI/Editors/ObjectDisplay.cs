@@ -15,10 +15,22 @@ namespace JustObjectsPrototype.UI.Editors
 
 		public static readonly DependencyProperty DisplayObjectProperty = DependencyProperty.Register("DisplayObject", typeof(object), typeof(ObjectDisplay), new PropertyMetadata(null, DisplayObjectChanged));
 
-		private static void DisplayObjectChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e) 
+		private static void DisplayObjectChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
 		{
 			var od = sender as ObjectDisplay;
-			if (e.NewValue == null || (e.NewValue != null && e.NewValue == ReferenceTypePropertyViewModel.NullEntry))
+			if (e.NewValue == null 
+				|| 
+				(
+					e.NewValue != null 
+					&& 
+					(
+						e.NewValue == ReferenceTypePropertyViewModel.NullEntry
+						||
+						e.NewValue == ReferenceTypeListPropertyViewModel.NullEntry
+						||
+						(e.NewValue is string && e.NewValue as string == string.Empty)
+					)
+				))
 				return;
 
 			od.Text = ToStringOrJson(e.NewValue);
@@ -28,7 +40,7 @@ namespace JustObjectsPrototype.UI.Editors
 		{
 			var type = value.GetType();
 			var toString = type.GetMethod("ToString");
-			if (toString.DeclaringType == type)
+			if (toString != null && toString.DeclaringType == type)
 			{
 				return toString.Invoke(value, new object[0]).ToString();
 			}

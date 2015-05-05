@@ -15,7 +15,7 @@ namespace JustObjectsPrototype.UI
 	{
 		Objects _Objects;
 
-		public MainWindowModel(ICollection<object> objects, List<Type> types = null)
+		public MainWindowModel(ICollection<object> objects, List<Type> types)
 		{
 			//TODO: 
 			//1. object functionality ribbon
