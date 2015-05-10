@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace JustObjectsPrototype.UI.Editors
 {
-	public class ReferenceTypePropertyViewModel : IPropertyViewModel
+	public class ReferenceTypePropertyViewModel : ViewModel, IPropertyViewModel
 	{
 		public static object NullEntry = " ";
 
@@ -42,6 +42,11 @@ namespace JustObjectsPrototype.UI.Editors
 				Property.SetValue(Instance.ProxiedObject, value);
 				Instance.RaisePropertyChanged(Property.Name);
 			}
+		}
+
+		public void RaiseChanged()
+		{
+			Changed(() => Reference);
 		}
 	}
 }

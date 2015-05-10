@@ -5,7 +5,7 @@ namespace JustObjectsPrototype.UI.Editors
 {
 	public class DateTimePropertyViewModel : SimpleTypePropertyViewModel { }
 
-	public class SimpleTypePropertyViewModel : IPropertyViewModel
+	public class SimpleTypePropertyViewModel : ViewModel, IPropertyViewModel
 	{
 		public ObjectProxy Instance { private get; set; }
 		public PropertyInfo Property { private get; set; }
@@ -38,6 +38,11 @@ namespace JustObjectsPrototype.UI.Editors
 					System.Windows.MessageBox.Show("Assignment error: " + e.Message);
 				}
 			}
+		}
+
+		public void RaiseChanged()
+		{
+			Changed(() => Value);
 		}
 	}
 }

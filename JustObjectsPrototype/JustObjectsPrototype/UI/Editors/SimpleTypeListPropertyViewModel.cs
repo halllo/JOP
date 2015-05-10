@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace JustObjectsPrototype.UI.Editors
 {
-	public class SimpleTypeListPropertyViewModel : IPropertyViewModel
+	public class SimpleTypeListPropertyViewModel : ViewModel, IPropertyViewModel
 	{
 		public ObjectProxy Instance { private get; set; }
 		public PropertyInfo Property { private get; set; }
@@ -86,6 +86,12 @@ namespace JustObjectsPrototype.UI.Editors
 			{
 				System.Windows.MessageBox.Show("Assignment error: " + ex.Message);
 			}
+		}
+
+		public void RaiseChanged()
+		{
+			collection = null;
+			Changed(() => Value);
 		}
 	}
 }

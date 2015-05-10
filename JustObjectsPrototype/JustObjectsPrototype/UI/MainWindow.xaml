@@ -50,7 +50,7 @@
 				<RibbonGroup Header="Object Functionality" ItemsSource="{Binding Functions}">
 					<RibbonGroup.ItemTemplate>
 						<DataTemplate>
-							<RibbonButton Label="{Binding}" />
+							<RibbonButton Label="{Binding Item1}" Command="{Binding Item2}" />
 						</DataTemplate>
 					</RibbonGroup.ItemTemplate>
 				</RibbonGroup>

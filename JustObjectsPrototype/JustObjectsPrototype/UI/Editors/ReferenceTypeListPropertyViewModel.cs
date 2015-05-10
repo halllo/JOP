@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace JustObjectsPrototype.UI.Editors
 {
-	public class ReferenceTypeListPropertyViewModel : IPropertyViewModel
+	public class ReferenceTypeListPropertyViewModel : ViewModel, IPropertyViewModel
 	{
 		public static object NullEntry = " ";
 
@@ -151,6 +151,12 @@ namespace JustObjectsPrototype.UI.Editors
 			{
 				System.Windows.MessageBox.Show("Assignment error: " + ex.Message);
 			}
+		}
+
+		public void RaiseChanged()
+		{
+			collection = null;
+			Changed(() => Value);
 		}
 	}
 }

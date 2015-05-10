@@ -19,12 +19,16 @@ namespace JustObjectsPrototype.UI
 		{
 			//TODO: 
 			//1. object functionality ribbon
+			//1a returning objects that already are in list, they are not added again
+			//1b returning lists of objects
+			//1c object parameters
+			//1d object list parameters (to add and remove objects from the ambient objects)
+			
 
 			_Objects = new Objects(objects);
 
 			Columns = new ObservableCollection<DataGridColumn>();
 			Types = types != null ? new ObservableCollection<Type>(types) : _Objects.Types;
-			Functions = new List<string> { "do1", "do2" };
 
 			Diagnose = new Command(
 				execute: () => MessageBox.Show("all objects: \n\n\t" + string.Join("\n\t", _Objects.All)));
@@ -88,36 +92,68 @@ namespace JustObjectsPrototype.UI
 				if (selectedObject != null)
 				{
 					var type = selectedObject.ProxiedObject.GetType();
+
 					var properties = type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
 					var propertiesViewModels =
 						from property in properties
-						select property.CanRead && property.PropertyType == typeof(DateTime) ?									(IPropertyViewModel)new DateTimePropertyViewModel { Instance = selectedObject, Property = property }
-							 : property.CanRead && property.PropertyType == typeof(string) ?									(IPropertyViewModel)new SimpleTypePropertyViewModel { Instance = selectedObject, Property = property }
+						select property.CanRead && property.PropertyType == typeof(DateTime) ? (IPropertyViewModel)new DateTimePropertyViewModel { Instance = selectedObject, Property = property }
+
+							 : property.CanRead && property.PropertyType == typeof(string) ? (IPropertyViewModel)new SimpleTypePropertyViewModel { Instance = selectedObject, Property = property }
+
 							 : property.CanRead
 									&& property.PropertyType.IsGenericType
-									&& property.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
-									&& _Objects.Types.Contains(property.PropertyType.GetGenericArguments().FirstOrDefault()) ?	(IPropertyViewModel)new ReferenceTypeListPropertyViewModel { Instance = selectedObject, Property = property, Objects = _Objects.OfType(property.PropertyType.GetGenericArguments().FirstOrDefault()).Select(o => o.ProxiedObject) }
-							 : property.CanRead
+									&& (property.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
+										||
+										property.PropertyType.GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IEnumerable)))
+									&& _Objects.Types.Contains(property.PropertyType.GetGenericArguments().FirstOrDefault()) ? (IPropertyViewModel)new ReferenceTypeListPropertyViewModel { Instance = selectedObject, Property = property, Objects = _Objects.OfType(property.PropertyType.GetGenericArguments().FirstOrDefault()).Select(o => o.ProxiedObject) }
+
+							: property.CanRead
 									&& property.PropertyType.IsGenericType
-									&& property.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>) ?				(IPropertyViewModel)new SimpleTypeListPropertyViewModel { Instance = selectedObject, Property = property }
-							 : property.CanRead && _Objects.Types.Contains(property.PropertyType) ?								(IPropertyViewModel)new ReferenceTypePropertyViewModel { Instance = selectedObject, Property = property, Objects = _Objects.OfType(property.PropertyType).Select(o => o.ProxiedObject) }
-							 : property.CanRead ?																				(IPropertyViewModel)new SimpleTypePropertyViewModel { Instance = selectedObject, Property = property }
+									&& (property.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
+										||
+										property.PropertyType.GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IEnumerable))) ?
+																																(IPropertyViewModel)new SimpleTypeListPropertyViewModel { Instance = selectedObject, Property = property }
+
+							 : property.CanRead && _Objects.Types.Contains(property.PropertyType) ? (IPropertyViewModel)new ReferenceTypePropertyViewModel { Instance = selectedObject, Property = property, Objects = _Objects.OfType(property.PropertyType).Select(o => o.ProxiedObject) }
+
+							 : property.CanRead ? (IPropertyViewModel)new SimpleTypePropertyViewModel { Instance = selectedObject, Property = property }
 							 : null;
 
 					Properties = propertiesViewModels.Where(p => p != null).ToList<IPropertyViewModel>();
+
+
+					var methods = type.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+					var functions = from m in methods
+									where m.DeclaringType != typeof(object)
+									where m.IsSpecialName == false
+									select Tuple.Create(m.Name, new Command(() =>
+									{
+										var result = m.Invoke(selectedObject.ProxiedObject, new object[0]);
+										if (result != null && _Objects.Types.Contains(result.GetType()))// && _Objects.OfType(result.GetType()).Select(o => o.ProxiedObject)
+										{
+											_Objects.OfType(result.GetType()).Add(new ObjectProxy(result));
+										}
+
+										selectedObject.RaisePropertyChanged(string.Empty);
+										Properties.ForEach(p => p.RaiseChanged());
+									}));
+
+					Functions = functions.ToList();
 				}
 				else
 				{
 					Properties = new List<IPropertyViewModel>();
+					Functions = new List<Tuple<string, Command>>();
 				}
 
 				Changed(() => Properties);
+				Changed(() => Functions);
 				Delete.RaiseCanExecuteChanged();
 			}
 		}
 
-		public List<string> Functions { get; set; }
 		public List<IPropertyViewModel> Properties { get; set; }
+		public List<Tuple<string, Command>> Functions { get; set; }
 
 		public Command Diagnose { get; set; }
 		public Command New { get; set; }

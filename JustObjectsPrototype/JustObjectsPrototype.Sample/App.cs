@@ -52,6 +52,11 @@ namespace JustObjectsPrototype.Sample
 		public decimal Betrag { get; set; }
 		public IEnumerable<string> Strings { get; set; }
 		public IEnumerable<decimal> Decimals { get; set; }
+
+		public void Erhöhen()
+		{
+			Betrag += 1;
+		}
 	}
 
 	public class Kunde
@@ -59,11 +64,19 @@ namespace JustObjectsPrototype.Sample
 		public string Vorname { get; set; }
 		public string Nachname { get; set; }
 		public Kunde Vertreter { get; set; }
-		public IEnumerable<Kunde> Freunde { get; set; }
+		public List<Kunde> Freunde { get; set; }
 
 		//public override string ToString()
 		//{
 		//	return Vorname + " " + Nachname;
 		//}
+
+		public Kunde NeuerFreund()
+		{
+			var kunde = new Kunde { Vorname = "Neuer" + DateTime.Now.Ticks, Nachname = "Freund" + DateTime.Now.Ticks };
+			Freunde.Add(kunde);
+
+			return Vertreter;
+		}
 	}
 }
