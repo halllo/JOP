@@ -71,12 +71,12 @@ namespace JustObjectsPrototype.Sample
 		//	return Vorname + " " + Nachname;
 		//}
 
-		public Kunde NeuerFreund()
+		public List<Kunde> NeuerFreund()
 		{
 			var kunde = new Kunde { Vorname = "Neuer" + DateTime.Now.Ticks, Nachname = "Freund" + DateTime.Now.Ticks };
 			Freunde.Add(kunde);
 
-			return Vertreter;
+			return new List<Kunde> { kunde };
 		}
 	}
 }

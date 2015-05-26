@@ -19,11 +19,9 @@ namespace JustObjectsPrototype.UI
 		{
 			//TODO: 
 			//1. object functionality ribbon
-			//1a returning objects that already are in list, they are not added again
-			//1b returning lists of objects
 			//1c object parameters
 			//1d object list parameters (to add and remove objects from the ambient objects)
-			
+
 
 			_Objects = new Objects(objects);
 
@@ -129,9 +127,35 @@ namespace JustObjectsPrototype.UI
 									select Tuple.Create(m.Name, new Command(() =>
 									{
 										var result = m.Invoke(selectedObject.ProxiedObject, new object[0]);
-										if (result != null && _Objects.Types.Contains(result.GetType()))// && _Objects.OfType(result.GetType()).Select(o => o.ProxiedObject)
+										var resultType = result.GetType();
+
+										if (result != null)
 										{
-											_Objects.OfType(result.GetType()).Add(new ObjectProxy(result));
+											if (_Objects.Types.Contains(resultType))
+											{
+												var objectsOfType = _Objects.OfType(resultType);
+												if (objectsOfType.All(o => !o.ProxiedObject.Equals(result)))
+												{
+													objectsOfType.Add(new ObjectProxy(result));
+												}
+											}
+
+											if (resultType.IsGenericType
+												&& (resultType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
+													||
+													resultType.GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IEnumerable)))
+												&& _Objects.Types.Contains(resultType.GetGenericArguments().FirstOrDefault()))
+											{
+												var resultItemType = resultType.GetGenericArguments().FirstOrDefault();
+												var objectsOfType = _Objects.OfType(resultItemType);
+												foreach (var resultItem in (IEnumerable)result)
+												{
+													if (resultItem != null && objectsOfType.All(o => !o.ProxiedObject.Equals(resultItem)))
+													{
+														objectsOfType.Add(new ObjectProxy(resultItem));
+													} 
+												}
+											}
 										}
 
 										selectedObject.RaisePropertyChanged(string.Empty);
