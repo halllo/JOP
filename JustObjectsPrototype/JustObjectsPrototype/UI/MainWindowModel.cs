@@ -126,11 +126,18 @@ namespace JustObjectsPrototype.UI
 									where m.IsSpecialName == false
 									select Tuple.Create(m.Name, new Command(() =>
 									{
-										var result = m.Invoke(selectedObject.ProxiedObject, new object[0]);
-										var resultType = result.GetType();
+										var parameters = m.GetParameters();
+										if (parameters.Length > 0)
+										{
+											var dialog = new MethodInvokeDialog { Title = m.Name };
+											dialog.ShowDialog();
+										}
+										var parameterInstances = parameters.Select(p => p.ParameterType.IsValueType ? Activator.CreateInstance(p.ParameterType) : null).ToArray();
 
+										var result = m.Invoke(selectedObject.ProxiedObject, parameterInstances);
 										if (result != null)
 										{
+											var resultType = result.GetType();
 											if (_Objects.Types.Contains(resultType))
 											{
 												var objectsOfType = _Objects.OfType(resultType);
@@ -153,7 +160,7 @@ namespace JustObjectsPrototype.UI
 													if (resultItem != null && objectsOfType.All(o => !o.ProxiedObject.Equals(resultItem)))
 													{
 														objectsOfType.Add(new ObjectProxy(resultItem));
-													} 
+													}
 												}
 											}
 										}
