@@ -129,8 +129,7 @@ namespace JustObjectsPrototype.UI
 										var parameters = m.GetParameters();
 										if (parameters.Length > 0)
 										{
-											var dialog = new MethodInvokeDialog { Title = m.Name };
-											dialog.ShowDialog();
+											ShowMethodInvocationDialog(m.Name);
 										}
 										var parameterInstances = parameters.Select(p => p.ParameterType.IsValueType ? Activator.CreateInstance(p.ParameterType) : null).ToArray();
 
@@ -189,5 +188,7 @@ namespace JustObjectsPrototype.UI
 		public Command Diagnose { get; set; }
 		public Command New { get; set; }
 		public Command Delete { get; set; }
+
+		public Action<object> ShowMethodInvocationDialog { get; set; }
 	}
 }

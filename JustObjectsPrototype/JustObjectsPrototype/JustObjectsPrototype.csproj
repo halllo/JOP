@@ -63,8 +63,8 @@
     <Compile Include="UI\Editors\SimpleTypeListPropertyViewModel.cs" />
     <Compile Include="UI\Editors\SimpleTypePropertyViewModel.cs" />
     <Compile Include="UI\Editors\ObjectDisplay.cs" />
-    <Compile Include="UI\MethodInvokeDialog.xaml.cs">
-      <DependentUpon>MethodInvokeDialog.xaml</DependentUpon>
+    <Compile Include="UI\MethodInvocationDialog.xaml.cs">
+      <DependentUpon>MethodInvocationDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\ViewModel.cs" />
     <Compile Include="Show.cs" />
@@ -76,7 +76,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="UI\MethodInvokeDialog.xaml">
+    <Page Include="UI\MethodInvocationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

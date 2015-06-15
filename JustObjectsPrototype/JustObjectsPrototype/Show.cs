@@ -8,9 +8,17 @@ namespace JustObjectsPrototype
 	{
 		public static void With(ICollection<object> objects, List<Type> types = null)
 		{
+			var windowModel = new MainWindowModel(objects, types)
+			{
+				ShowMethodInvocationDialog = dataContext =>
+				{
+					var dialog = new MethodInvocationDialog { Title = dataContext.ToString() };
+					dialog.ShowDialog();
+				}
+			};
 			var window = new MainWindow
 			{
-				DataContext = new MainWindowModel(objects, types)
+				DataContext = windowModel
 			};
 			window.ShowDialog();
 		}
