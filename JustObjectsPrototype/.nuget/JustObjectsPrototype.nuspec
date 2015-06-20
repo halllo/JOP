@@ -13,6 +13,6 @@
         <tags>prototype prototyping objects poco jop justobjectsprototype</tags>
     </metadata>
     <files>
-        <file src="..\JustObjectsPrototype\bin\Release\JustObjectsPrototype.dll" target="lib\JustObjectsPrototype.dll" />
+        <file src="..\JustObjectsPrototype\bin\Release\JustObjectsPrototype.dll" target="lib\net45\JustObjectsPrototype.dll" />
     </files>
 </package>
