@@ -66,11 +66,6 @@ namespace JustObjectsPrototype.Sample
 		public Kunde Vertreter { get; set; }
 		public List<Kunde> Freunde { get; set; }
 
-		//public override string ToString()
-		//{
-		//	return Vorname + " " + Nachname;
-		//}
-
 		public List<Kunde> NeuerFreund()
 		{
 			var kunde = new Kunde { Vorname = "Neuer" + DateTime.Now.Ticks, Nachname = "Freund" + DateTime.Now.Ticks };
@@ -78,10 +73,27 @@ namespace JustObjectsPrototype.Sample
 
 			return new List<Kunde> { kunde };
 		}
-
-		public void HalloSagen(Kunde kunde, int alter)
+		
+		public Kunde Clonen()
 		{
-			MessageBox.Show("Hallo " + kunde.Vorname + " " + kunde.Nachname + " (" + alter + ")");
+			var kunde = new Kunde { Vorname = Vorname + DateTime.Now.Ticks, Nachname = Nachname + DateTime.Now.Ticks };
+
+			return kunde;
+		}
+
+		public Kunde Ich()
+		{
+			return this;
+		}
+
+		public void Zahlen(List<int> zahlen)
+		{
+			MessageBox.Show("Zahlen: " + string.Join(", ", zahlen));
+		}
+
+		public void HalloSagen(List<Kunde> kunden)
+		{
+			MessageBox.Show("Hallo " + string.Join(", ", kunden.ConvertAll(k => k.Vorname + " " + k.Nachname)));
 		}
 	}
 }

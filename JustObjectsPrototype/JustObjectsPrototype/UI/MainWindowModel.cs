@@ -110,7 +110,9 @@ namespace JustObjectsPrototype.UI
 												Properties = propertiesViewModels
 											});
 											if (dialogResult != true) return;
-											parameterInstances.AddRange(propertiesViewModels.Select(p => p.Value));
+
+											var runtimeTypeForParametersProperties = runtimeTypeForParameters.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+											parameterInstances.AddRange(runtimeTypeForParametersProperties.Select(p => p.GetValue(runtimeTypeForParametersInstance)));
 										}
 
 										object result = null;
@@ -120,7 +122,7 @@ namespace JustObjectsPrototype.UI
 										}
 										catch (Exception e)
 										{
-											MessageBox.Show("An Exception occured in " + m.Name + ".\n\n" + e.ToString(), "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+											MessageBox.Show("An Exception occured in " + m.Name + ".\n\n" + e.InnerException.ToString(), "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
 											return;
 										}
 
