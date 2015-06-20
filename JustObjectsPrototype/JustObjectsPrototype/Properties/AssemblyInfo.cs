@@ -8,9 +8,9 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("JustObjectsPrototype")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Prototype shell for POCOs.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Manuel Naujoks")]
 [assembly: AssemblyProduct("JustObjectsPrototype")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]

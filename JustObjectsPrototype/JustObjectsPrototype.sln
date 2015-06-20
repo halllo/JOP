@@ -9,6 +9,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JustObjectsPrototype.Tests"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JustObjectsPrototype.Sample", "JustObjectsPrototype.Sample\JustObjectsPrototype.Sample.csproj", "{235E4BCA-2FF2-42D3-BB1B-AC43E61FC444}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{B29DBA2F-7C36-4755-90A6-CDF47E3C74A6}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\JustObjectsPrototype.nuspec = .nuget\JustObjectsPrototype.nuspec
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+		.nuget\pack.ps1 = .nuget\pack.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

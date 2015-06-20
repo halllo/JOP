@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>JOP</id>
+        <version>$version$/version>
+        <authors>Manuel Naujoks</authors>
+        <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+        <projectUrl>https://github.com/halllo/JOP</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Create only your domain objects and get a prototype shell for free.</description>
+        <summary>Prototype shell for POCOs.</summary>
+        <releaseNotes />
+        <tags>prototype prototyping objects poco jop justobjectsprototype</tags>
+    </metadata>
+    <files>
+        <file src="..\JustObjectsPrototype\bin\Release\JustObjectsPrototype.dll" target="lib\JustObjectsPrototype.dll" />
+    </files>
+</package>
