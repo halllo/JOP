@@ -20,6 +20,8 @@ namespace JustObjectsPrototype.UI.Editors
 
 		public string Label { get { return Property.Name; } }
 
+		public string Error { get; set; }
+
 		public class SimpleTypeWrapper
 		{
 			public Action ValueChanged { get; set; }
@@ -65,6 +67,7 @@ namespace JustObjectsPrototype.UI.Editors
 
 		private void Assign()
 		{
+			Error = string.Empty;
 			try
 			{
 				var canBeNull = !collectionItemType.IsValueType || (Nullable.GetUnderlyingType(collectionItemType) != null);
@@ -84,8 +87,9 @@ namespace JustObjectsPrototype.UI.Editors
 			}
 			catch (Exception ex)
 			{
-				System.Windows.MessageBox.Show("Assignment error: " + ex.Message);
+				Error = ex.Message;
 			}
+			Changed(() => Error);
 		}
 
 		public void RaiseChanged()

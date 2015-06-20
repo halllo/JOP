@@ -91,35 +91,8 @@ namespace JustObjectsPrototype.UI
 				{
 					var type = selectedObject.ProxiedObject.GetType();
 
-					var properties = type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-					var propertiesViewModels =
-						from property in properties
-						select property.CanRead && property.PropertyType == typeof(DateTime) ? (IPropertyViewModel)new DateTimePropertyViewModel { Instance = selectedObject, Property = property }
-
-							 : property.CanRead && property.PropertyType == typeof(string) ? (IPropertyViewModel)new SimpleTypePropertyViewModel { Instance = selectedObject, Property = property }
-
-							 : property.CanRead
-									&& property.PropertyType.IsGenericType
-									&& (property.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
-										||
-										property.PropertyType.GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IEnumerable)))
-									&& _Objects.Types.Contains(property.PropertyType.GetGenericArguments().FirstOrDefault()) ? (IPropertyViewModel)new ReferenceTypeListPropertyViewModel { Instance = selectedObject, Property = property, Objects = _Objects.OfType(property.PropertyType.GetGenericArguments().FirstOrDefault()).Select(o => o.ProxiedObject) }
-
-							: property.CanRead
-									&& property.PropertyType.IsGenericType
-									&& (property.PropertyType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
-										||
-										property.PropertyType.GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IEnumerable))) ?
-																																(IPropertyViewModel)new SimpleTypeListPropertyViewModel { Instance = selectedObject, Property = property }
-
-							 : property.CanRead && _Objects.Types.Contains(property.PropertyType) ? (IPropertyViewModel)new ReferenceTypePropertyViewModel { Instance = selectedObject, Property = property, Objects = _Objects.OfType(property.PropertyType).Select(o => o.ProxiedObject) }
-
-							 : property.CanRead ? (IPropertyViewModel)new SimpleTypePropertyViewModel { Instance = selectedObject, Property = property }
-							 : null;
-
-					Properties = propertiesViewModels.Where(p => p != null).ToList<IPropertyViewModel>();
-
-
+					Properties = PropertiesViewModels.Of(type, _Objects, selectedObject);
+					
 					var methods = type.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
 					var functions = from m in methods
 									where m.DeclaringType != typeof(object)
