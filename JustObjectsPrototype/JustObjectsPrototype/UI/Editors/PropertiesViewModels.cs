@@ -10,6 +10,7 @@ namespace JustObjectsPrototype.UI.Editors
 		public static List<IPropertyViewModel> Of(Type type, Objects objects, ObjectProxy selectedObject)
 		{
 			var properties = type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+
 			var propertiesViewModels =
 				from property in properties
 				select property.CanRead && property.PropertyType == typeof(DateTime) ? (IPropertyViewModel)new DateTimePropertyViewModel { Instance = selectedObject, Property = property }

@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ObjectProxy.cs" />
+    <Compile Include="TypeCreator.cs" />
     <Compile Include="UI\Command.cs" />
     <Compile Include="Objects.cs" />
     <Compile Include="UI\DataGridColumnsBehavior.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="UI\MethodInvocationDialog.xaml.cs">
       <DependentUpon>MethodInvocationDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\MethodInvocationDialogModel.cs" />
     <Compile Include="UI\ViewModel.cs" />
     <Compile Include="Show.cs" />
     <Page Include="UI\Editors\PropertiesViews.xaml">

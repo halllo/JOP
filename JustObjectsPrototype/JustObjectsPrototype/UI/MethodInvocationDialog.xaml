@@ -1,8 +1,41 @@
 ﻿<Window x:Class="JustObjectsPrototype.UI.MethodInvocationDialog"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Height="300" Width="300">
-    <Grid>
-        
-    </Grid>
+		xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		MinHeight="200" MinWidth="200" 
+		Height="300" Width="500" 
+		WindowStyle="ToolWindow"
+		Title="{Binding MethodName}">
+	<Grid Background="#F0F0F0">
+		<Grid.RowDefinitions>
+			<RowDefinition/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<ScrollViewer Grid.Column="0" Grid.Row="0" Background="White">
+			<ItemsControl ItemsSource="{Binding Properties}" Padding="20" Focusable="True" TabIndex="9999">
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<StackPanel Orientation="Vertical"/>
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.Resources>
+					<ResourceDictionary Source="Editors/PropertiesViews.xaml" />
+				</ItemsControl.Resources>
+			</ItemsControl>
+		</ScrollViewer>
+		<StackPanel Grid.Row="1" 
+					Margin="10" 
+					VerticalAlignment="Center" 
+					HorizontalAlignment="Right"
+					Orientation="Horizontal"
+					>
+			<Button Width="80" Height="25"
+					IsDefault="True"
+					Content="invoke"
+					Click="Invoke_Click"/>
+			<TextBlock Width="10" />
+			<Button Width="80" Height="25"
+					IsCancel="True"
+					Content="cancel"/>
+		</StackPanel>
+	</Grid>
 </Window>

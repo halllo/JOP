@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,7 +18,6 @@ namespace JustObjectsPrototype.UI
 		{
 			//TODO: 
 			//1. object functionality ribbon
-			//1c object parameters
 			//1d object list parameters (to add and remove objects from the ambient objects)
 
 
@@ -90,7 +88,7 @@ namespace JustObjectsPrototype.UI
 				if (selectedObject != null)
 				{
 					var type = selectedObject.ProxiedObject.GetType();
-
+					
 					Properties = PropertiesViewModels.Of(type, _Objects, selectedObject);
 					
 					var methods = type.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
@@ -100,13 +98,32 @@ namespace JustObjectsPrototype.UI
 									select Tuple.Create(m.Name, new Command(() =>
 									{
 										var parameters = m.GetParameters();
+										var parameterInstances = new List<object>();
 										if (parameters.Length > 0)
 										{
-											ShowMethodInvocationDialog(m.Name);
+											var runtimeTypeForParameters = TypeCreator.New(m.Name, parameters.ToDictionary(p => p.Name, p => p.ParameterType));
+											var runtimeTypeForParametersInstance = Activator.CreateInstance(runtimeTypeForParameters);
+											var propertiesViewModels = PropertiesViewModels.Of(runtimeTypeForParameters, _Objects, new ObjectProxy(runtimeTypeForParametersInstance));
+											var dialogResult = ShowMethodInvocationDialog(new MethodInvocationDialogModel
+											{
+												MethodName = m.Name,
+												Properties = propertiesViewModels
+											});
+											if (dialogResult != true) return;
+											parameterInstances.AddRange(propertiesViewModels.Select(p => p.Value));
 										}
-										var parameterInstances = parameters.Select(p => p.ParameterType.IsValueType ? Activator.CreateInstance(p.ParameterType) : null).ToArray();
 
-										var result = m.Invoke(selectedObject.ProxiedObject, parameterInstances);
+										object result = null;
+										try
+										{
+											result = m.Invoke(selectedObject.ProxiedObject, parameterInstances.ToArray());
+										}
+										catch (Exception e)
+										{
+											MessageBox.Show("An Exception occured in " + m.Name + ".\n\n" + e.ToString(), "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+											return;
+										}
+
 										if (result != null)
 										{
 											var resultType = result.GetType();
@@ -118,7 +135,6 @@ namespace JustObjectsPrototype.UI
 													objectsOfType.Add(new ObjectProxy(result));
 												}
 											}
-
 											if (resultType.IsGenericType
 												&& (resultType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
 													||
@@ -136,7 +152,6 @@ namespace JustObjectsPrototype.UI
 												}
 											}
 										}
-
 										selectedObject.RaisePropertyChanged(string.Empty);
 										Properties.ForEach(p => p.RaiseChanged());
 									}));
@@ -162,6 +177,6 @@ namespace JustObjectsPrototype.UI
 		public Command New { get; set; }
 		public Command Delete { get; set; }
 
-		public Action<object> ShowMethodInvocationDialog { get; set; }
+		public Func<object, bool?> ShowMethodInvocationDialog { get; set; }
 	}
 }

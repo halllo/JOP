@@ -79,9 +79,9 @@ namespace JustObjectsPrototype.Sample
 			return new List<Kunde> { kunde };
 		}
 
-		public void HalloSagen(Kunde kunde)
+		public void HalloSagen(Kunde kunde, int alter)
 		{
-			MessageBox.Show("Hallo " + kunde.Vorname + " " + kunde.Nachname);
+			MessageBox.Show("Hallo " + kunde.Vorname + " " + kunde.Nachname + " (" + alter + ")");
 		}
 	}
 }

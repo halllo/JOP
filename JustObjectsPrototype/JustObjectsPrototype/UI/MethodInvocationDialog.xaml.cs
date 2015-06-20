@@ -8,5 +8,10 @@ namespace JustObjectsPrototype.UI
 		{
 			InitializeComponent();
 		}
+
+		private void Invoke_Click(object sender, RoutedEventArgs e)
+		{
+			DialogResult = true;
+		}
 	}
 }

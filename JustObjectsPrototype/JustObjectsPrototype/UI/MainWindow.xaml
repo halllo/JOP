@@ -73,7 +73,7 @@
 				  AutoGenerateColumns="False" local:DataGridColumnsBehavior.BindableColumns="{Binding Columns}"/>
 
 
-		<ScrollViewer Grid.Column="1" Grid.Row="2" Background="GhostWhite">
+		<ScrollViewer Grid.Column="1" Grid.Row="2" Background="WhiteSmoke">
 			<ItemsControl ItemsSource="{Binding Properties}" Padding="20" Focusable="True" TabIndex="9999">
 				<ItemsControl.ItemsPanel>
 					<ItemsPanelTemplate>

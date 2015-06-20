@@ -12,8 +12,8 @@ namespace JustObjectsPrototype
 			{
 				ShowMethodInvocationDialog = dataContext =>
 				{
-					var dialog = new MethodInvocationDialog { Title = dataContext.ToString() };
-					dialog.ShowDialog();
+					var dialog = new MethodInvocationDialog { DataContext = dataContext };
+					return dialog.ShowDialog();
 				}
 			};
 			var window = new MainWindow

@@ -25,11 +25,11 @@ namespace JustObjectsPrototype.UI.Editors
 		{
 			get
 			{
-				return Enumerable.Concat(new[] { NullEntry, Reference ?? NullEntry }, Objects).Distinct();
+				return Enumerable.Concat(new[] { NullEntry, Value ?? NullEntry }, Objects).Distinct();
 			}
 		}
 
-		public object Reference
+		public object Value
 		{
 			get
 			{
@@ -46,7 +46,7 @@ namespace JustObjectsPrototype.UI.Editors
 
 		public void RaiseChanged()
 		{
-			Changed(() => Reference);
+			Changed(() => Value);
 		}
 	}
 }

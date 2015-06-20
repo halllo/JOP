@@ -68,7 +68,7 @@
 				<RowDefinition/>
 			</Grid.RowDefinitions>
 			<TextBlock Grid.Row="0" Text="{Binding Label}" Foreground="Gray"/>
-			<ComboBox Grid.Row="1" ItemsSource="{Binding References}" SelectedItem="{Binding Reference}" IsEnabled="{Binding CanWrite}">
+			<ComboBox Grid.Row="1" ItemsSource="{Binding References}" SelectedItem="{Binding Value}" IsEnabled="{Binding CanWrite}">
 				<ComboBox.ItemTemplate>
 					<DataTemplate>
 						<local:ObjectDisplay DisplayObject="{Binding}"/>
