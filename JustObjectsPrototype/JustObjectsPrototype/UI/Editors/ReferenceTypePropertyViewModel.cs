@@ -29,6 +29,8 @@ namespace JustObjectsPrototype.UI.Editors
 			}
 		}
 
+		public Type ValueType { get { return Property.PropertyType; } }
+
 		public object Value
 		{
 			get

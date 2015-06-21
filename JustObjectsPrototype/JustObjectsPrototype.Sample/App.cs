@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 
 namespace JustObjectsPrototype.Sample
@@ -44,6 +45,13 @@ namespace JustObjectsPrototype.Sample
 		Kunde mandant = new Kunde { Vorname = "Hans", Nachname = "Müller" };
 		public Kunde Mandant { get { return mandant; } }
 		public DateTime Datum { get; set; }
+
+		public void RechnungenLöschen(ObservableCollection<Rechnung> rechnungen)
+		{
+			MessageBox.Show("Löschen: " + rechnungen.Count + " Rechnungen");
+			rechnungen.Clear();
+			MessageBox.Show("Gelöscht: " + rechnungen.Count + " Rechnungen");
+		}
 	}
 
 	public class Rechnung
@@ -73,7 +81,7 @@ namespace JustObjectsPrototype.Sample
 
 			return new List<Kunde> { kunde };
 		}
-		
+
 		public Kunde Clonen()
 		{
 			var kunde = new Kunde { Vorname = Vorname + DateTime.Now.Ticks, Nachname = Nachname + DateTime.Now.Ticks };
@@ -95,5 +103,15 @@ namespace JustObjectsPrototype.Sample
 		{
 			MessageBox.Show("Hallo " + string.Join(", ", kunden.ConvertAll(k => k.Vorname + " " + k.Nachname)));
 		}
+
+		public Brief Schreiben(string inhalt)
+		{
+			return new Brief { Inhalt = inhalt };
+		}
+	}
+
+	public class Brief
+	{
+		public string Inhalt { get; set; }
 	}
 }

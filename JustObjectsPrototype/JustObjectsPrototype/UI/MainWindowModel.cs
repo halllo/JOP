@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -18,8 +19,9 @@ namespace JustObjectsPrototype.UI
 		{
 			//TODO: 
 			//1. object functionality ribbon
-			//1d object list parameters (to add and remove objects from the ambient objects)
-
+			//1d object list parameters (clear objects from the ambient objects)
+			//1e object list parameters (add objects of previously untracked types should make the type appear)
+			
 
 			_Objects = new Objects(objects);
 
@@ -88,9 +90,9 @@ namespace JustObjectsPrototype.UI
 				if (selectedObject != null)
 				{
 					var type = selectedObject.ProxiedObject.GetType();
-					
+
 					Properties = PropertiesViewModels.Of(type, _Objects, selectedObject);
-					
+
 					var methods = type.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
 					var functions = from m in methods
 									where m.DeclaringType != typeof(object)
@@ -98,12 +100,13 @@ namespace JustObjectsPrototype.UI
 									select Tuple.Create(m.Name, new Command(() =>
 									{
 										var parameters = m.GetParameters();
-										var parameterInstances = new List<object>();
-										if (parameters.Length > 0)
+										var runtimeTypeForParameters = TypeCreator.New(m.Name, parameters.ToDictionary(p => p.Name, p => p.ParameterType));
+										var runtimeTypeForParametersInstance = Activator.CreateInstance(runtimeTypeForParameters);
+										var propertiesViewModels = PropertiesViewModels
+											.Of(runtimeTypeForParameters, _Objects, new ObjectProxy(runtimeTypeForParametersInstance))
+											.Where(p => IsObservableCollection(p.ValueType) == false).ToList();
+										if (parameters.Any(p => IsObservableCollection(p.ParameterType) == false))
 										{
-											var runtimeTypeForParameters = TypeCreator.New(m.Name, parameters.ToDictionary(p => p.Name, p => p.ParameterType));
-											var runtimeTypeForParametersInstance = Activator.CreateInstance(runtimeTypeForParameters);
-											var propertiesViewModels = PropertiesViewModels.Of(runtimeTypeForParameters, _Objects, new ObjectProxy(runtimeTypeForParametersInstance));
 											var dialogResult = ShowMethodInvocationDialog(new MethodInvocationDialogModel
 											{
 												MethodName = m.Name,
@@ -111,18 +114,20 @@ namespace JustObjectsPrototype.UI
 											});
 											if (dialogResult != true) return;
 
-											var runtimeTypeForParametersProperties = runtimeTypeForParameters.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-											parameterInstances.AddRange(runtimeTypeForParametersProperties.Select(p => p.GetValue(runtimeTypeForParametersInstance)));
 										}
+										var runtimeTypeForParametersProperties = runtimeTypeForParameters.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+										var parameterInstances = runtimeTypeForParametersProperties.Select(p => IsObservableCollection(p.PropertyType) 
+											? _Objects.OfType_OneWayToSourceChangePropagation(p.PropertyType.GetGenericArguments().First()) 
+											: p.GetValue(runtimeTypeForParametersInstance)).ToList();
 
 										object result = null;
 										try
 										{
 											result = m.Invoke(selectedObject.ProxiedObject, parameterInstances.ToArray());
 										}
-										catch (Exception e)
+										catch (TargetInvocationException tie)
 										{
-											MessageBox.Show("An Exception occured in " + m.Name + ".\n\n" + e.InnerException.ToString(), "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+											MessageBox.Show("An Exception occured in " + m.Name + ".\n\n" + tie.InnerException.ToString(), "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
 											return;
 										}
 
@@ -170,6 +175,11 @@ namespace JustObjectsPrototype.UI
 				Changed(() => Functions);
 				Delete.RaiseCanExecuteChanged();
 			}
+		}
+
+		private static bool IsObservableCollection(Type type)
+		{
+			return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ObservableCollection<>);
 		}
 
 		public List<IPropertyViewModel> Properties { get; set; }

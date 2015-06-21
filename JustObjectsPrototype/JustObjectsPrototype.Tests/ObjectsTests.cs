@@ -34,5 +34,71 @@ namespace JustObjectsPrototype.Tests
 
 			Assert.IsTrue(((DomainObject1)list[0]).Id == 1);
 		}
+
+		[TestMethod]
+		public void Add_To_ObjectsList_DoesNot_Also_Add_To_UnproxiedTypeObjectsList()
+		{
+			var list = new ObservableCollection<object>();
+			var objects = new Objects(list);
+
+			var domainObject1s = objects.OfType_OneWayToSourceChangePropagation<DomainObject1>();
+
+			list.Add(new DomainObject1 { Id = 1 });
+
+			Assert.IsTrue(domainObject1s.Count == 0);
+		}
+
+		[TestMethod]
+		public void Add_To_UnproxiedTypeObjectsList_Also_Adds_To_ObjectsList()
+		{
+			var list = new ObservableCollection<object>();
+			var objects = new Objects(list);
+
+			var domainObject1s = objects.OfType_OneWayToSourceChangePropagation<DomainObject1>();
+
+			domainObject1s.Add(new DomainObject1 { Id = 1 });
+
+			Assert.IsTrue(((DomainObject1)list[0]).Id == 1);
+		}
+
+		[TestMethod]
+		public void Add_To_ObjectsList_DoesNot_Also_Add_To_UnproxiedTypeObjectsList2()
+		{
+			var list = new ObservableCollection<object>();
+			var objects = new Objects(list);
+
+			var domainObject1s = (ObservableCollection<DomainObject1>)objects.OfType_OneWayToSourceChangePropagation(typeof(DomainObject1));
+
+			list.Add(new DomainObject1 { Id = 1 });
+
+			Assert.IsTrue(domainObject1s.Count == 0);
+		}
+
+		[TestMethod]
+		public void Add_To_UnproxiedTypeObjectsList_Also_Adds_To_ObjectsList2()
+		{
+			var list = new ObservableCollection<object>();
+			var objects = new Objects(list);
+
+			var domainObject1s = (ObservableCollection<DomainObject1>)objects.OfType_OneWayToSourceChangePropagation(typeof(DomainObject1));
+
+			domainObject1s.Add(new DomainObject1 { Id = 1 });
+
+			Assert.IsTrue(((DomainObject1)list[0]).Id == 1);
+		}
+
+		[TestMethod]
+		public void Clear_To_UnproxiedTypeObjectsList_Also_Clears_To_ObjectsList()
+		{
+			var list = new ObservableCollection<object>();
+			list.Add(new DomainObject1 { Id = 1 });
+
+			var objects = new Objects(list);
+
+			var domainObject1s = objects.OfType_OneWayToSourceChangePropagation<DomainObject1>();
+			domainObject1s.Clear();
+			
+			Assert.IsTrue(list.Count == 0);
+		}
 	}
 }

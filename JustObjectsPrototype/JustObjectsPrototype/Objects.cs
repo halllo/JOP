@@ -59,9 +59,25 @@ namespace JustObjectsPrototype
 			return _ObjectsByTypes[type];
 		}
 
+		public object OfType_OneWayToSourceChangePropagation(Type type)
+		{
+			return typeof(Objects)
+				.GetMethods()
+					.First(m => m.IsGenericMethod && m.Name == "OfType_OneWayToSourceChangePropagation")
+				.MakeGenericMethod(type)
+				.Invoke(this, null);
+		}
+
+		public ObservableCollection<T> OfType_OneWayToSourceChangePropagation<T>()
+		{
+			var observableCollection = new ObservableCollection<T>(OfType(typeof(T)).Select(o => (T)o.ProxiedObject));
+			observableCollection.CollectionChanged += objectlist_CollectionChanged;
+
+			return observableCollection;
+		}
+
 		void objectlist_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
-			var observableCollection = sender as ObservableCollection<object>;
 			if (e.Action == NotifyCollectionChangedAction.Add)
 			{
 				foreach (var newItem in e.NewItems)
@@ -99,7 +115,6 @@ namespace JustObjectsPrototype
 
 		void typedictionaryobjectlist_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
 		{
-			var observableCollection = sender as ObservableCollection<ObjectProxy>;
 			if (e.Action == NotifyCollectionChangedAction.Add)
 			{
 				foreach (var newItem in e.NewItems.Cast<ObjectProxy>())

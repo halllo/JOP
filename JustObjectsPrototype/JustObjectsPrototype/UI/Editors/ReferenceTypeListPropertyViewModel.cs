@@ -98,6 +98,8 @@ namespace JustObjectsPrototype.UI.Editors
 		ObservableCollection<ReferenceTypeWrapper> collection;
 		Type collectionItemType;
 
+		public Type ValueType { get { return Property.PropertyType; } }
+
 		public object Value
 		{
 			get

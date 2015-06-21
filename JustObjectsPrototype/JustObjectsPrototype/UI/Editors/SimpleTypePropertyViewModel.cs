@@ -18,6 +18,8 @@ namespace JustObjectsPrototype.UI.Editors
 
 		public string Label { get { return Property.Name; } }
 
+		public Type ValueType { get { return Property.PropertyType; } }
+
 		public object Value
 		{
 			get
