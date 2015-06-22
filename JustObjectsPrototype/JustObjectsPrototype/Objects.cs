@@ -85,7 +85,9 @@ namespace JustObjectsPrototype
 					var type = newItem.GetType();
 					if (_ObjectsByTypes.ContainsKey(type) == false)
 					{
-						_ObjectsByTypes.Add(type, new ObservableCollection<ObjectProxy>());
+						var newTypeObjectsList = new ObservableCollection<ObjectProxy>();
+						newTypeObjectsList.CollectionChanged += typedictionaryobjectlist_CollectionChanged;
+						_ObjectsByTypes.Add(type, newTypeObjectsList);
 						_Types.Add(type);
 					}
 					if (_ObjectToProxy.ContainsKey(newItem) == false)
@@ -109,6 +111,21 @@ namespace JustObjectsPrototype
 
 						_ObjectsByTypes[type].Remove(oldProxy);
 					}
+				}
+			}
+			if (e.Action == NotifyCollectionChangedAction.Reset)//clear
+			{
+				if (_Objects == sender)
+				{
+					foreach (var type in Types.ToList())
+					{
+						if (_ObjectsByTypes[type].Any()) _ObjectsByTypes[type].Clear();
+					}
+				}
+				else
+				{
+					var type = sender.GetType().GetGenericArguments().First();
+					if (_ObjectsByTypes[type].Any()) _ObjectsByTypes[type].Clear();
 				}
 			}
 		}
@@ -141,6 +158,19 @@ namespace JustObjectsPrototype
 					{
 						_Objects.Remove(oldItem.ProxiedObject);
 					}
+				}
+			}
+			if (e.Action == NotifyCollectionChangedAction.Reset)//clear
+			{
+				var type = _ObjectsByTypes.First(kvp => kvp.Value == sender).Key;
+
+				foreach (var kvp in _ObjectToProxy.Where(p => p.Key.GetType() == type).ToList())
+				{
+					_ObjectToProxy.Remove(kvp.Key);
+				}
+				foreach (var o in _Objects.Where(o => o.GetType() == type).ToList())
+				{
+					_Objects.Remove(o);
 				}
 			}
 		}

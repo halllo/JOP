@@ -52,6 +52,12 @@ namespace JustObjectsPrototype.Sample
 			rechnungen.Clear();
 			MessageBox.Show("Gelöscht: " + rechnungen.Count + " Rechnungen");
 		}
+
+		public void BriefeSchreiben(ObservableCollection<Brief> briefe)
+		{
+			MessageBox.Show(briefe.Count + " Briefe?");
+			briefe.Add(new Brief { Inhalt = "Hallo Welt" });
+		}
 	}
 
 	public class Rechnung
@@ -113,5 +119,20 @@ namespace JustObjectsPrototype.Sample
 	public class Brief
 	{
 		public string Inhalt { get; set; }
+
+		public int Fünf()
+		{
+			return 5;
+		}
+
+		public string HalloWeltString()
+		{
+			return "hallo welt";
+		}
+
+		public ContentElement ContentElement()
+		{
+			return new ContentElement();
+		}
 	}
 }

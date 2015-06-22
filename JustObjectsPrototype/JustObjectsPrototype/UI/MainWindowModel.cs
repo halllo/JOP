@@ -17,12 +17,6 @@ namespace JustObjectsPrototype.UI
 
 		public MainWindowModel(ICollection<object> objects, List<Type> types)
 		{
-			//TODO: 
-			//1. object functionality ribbon
-			//1d object list parameters (clear objects from the ambient objects)
-			//1e object list parameters (add objects of previously untracked types should make the type appear)
-			
-
 			_Objects = new Objects(objects);
 
 			Columns = new ObservableCollection<DataGridColumn>();
@@ -63,7 +57,9 @@ namespace JustObjectsPrototype.UI
 				selectedType = value;
 				Objects = _Objects.OfType(selectedType);
 
-				var properties = selectedType.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+				var properties = selectedType
+					.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
+					.Where(p => p.GetIndexParameters().Length == 0);
 				var columns = properties.Select(p => new DataGridTextColumn { Header = p.Name, Binding = new Binding(p.Name) }).ToList();
 				Columns.Clear();
 				foreach (var column in columns) Columns.Add(column);
@@ -116,8 +112,8 @@ namespace JustObjectsPrototype.UI
 
 										}
 										var runtimeTypeForParametersProperties = runtimeTypeForParameters.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-										var parameterInstances = runtimeTypeForParametersProperties.Select(p => IsObservableCollection(p.PropertyType) 
-											? _Objects.OfType_OneWayToSourceChangePropagation(p.PropertyType.GetGenericArguments().First()) 
+										var parameterInstances = runtimeTypeForParametersProperties.Select(p => IsObservableCollection(p.PropertyType)
+											? _Objects.OfType_OneWayToSourceChangePropagation(p.PropertyType.GetGenericArguments().First())
 											: p.GetValue(runtimeTypeForParametersInstance)).ToList();
 
 										object result = null;
@@ -134,27 +130,31 @@ namespace JustObjectsPrototype.UI
 										if (result != null)
 										{
 											var resultType = result.GetType();
-											if (_Objects.Types.Contains(resultType))
+											if (IsMicrosoftType(resultType) == false)
 											{
-												var objectsOfType = _Objects.OfType(resultType);
-												if (objectsOfType.All(o => !o.ProxiedObject.Equals(result)))
+												if (resultType.IsGenericType
+													&& (resultType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
+														||
+														resultType.GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IEnumerable)))
+													&& resultType.GetGenericArguments().Any()
+													&& resultType.GetGenericArguments().First().IsValueType)
 												{
-													objectsOfType.Add(new ObjectProxy(result));
-												}
-											}
-											if (resultType.IsGenericType
-												&& (resultType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
-													||
-													resultType.GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IEnumerable)))
-												&& _Objects.Types.Contains(resultType.GetGenericArguments().FirstOrDefault()))
-											{
-												var resultItemType = resultType.GetGenericArguments().FirstOrDefault();
-												var objectsOfType = _Objects.OfType(resultItemType);
-												foreach (var resultItem in (IEnumerable)result)
-												{
-													if (resultItem != null && objectsOfType.All(o => !o.ProxiedObject.Equals(resultItem)))
+													var resultItemType = resultType.GetGenericArguments().First();
+													var objectsOfType = _Objects.OfType(resultItemType);
+													foreach (var resultItem in (IEnumerable)result)
 													{
-														objectsOfType.Add(new ObjectProxy(resultItem));
+														if (resultItem != null && objectsOfType.All(o => !o.ProxiedObject.Equals(resultItem)))
+														{
+															objectsOfType.Add(new ObjectProxy(resultItem));
+														}
+													}
+												}
+												if (resultType.IsValueType == false)
+												{
+													var objectsOfType = _Objects.OfType(resultType);
+													if (objectsOfType.All(o => !o.ProxiedObject.Equals(result)))
+													{
+														objectsOfType.Add(new ObjectProxy(result));
 													}
 												}
 											}
@@ -177,9 +177,15 @@ namespace JustObjectsPrototype.UI
 			}
 		}
 
-		private static bool IsObservableCollection(Type type)
+		static bool IsObservableCollection(Type type)
 		{
 			return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(ObservableCollection<>);
+		}
+
+		static bool IsMicrosoftType(Type type)
+		{
+			object[] attrs = type.Assembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
+			return attrs.OfType<AssemblyCompanyAttribute>().Any(attr => attr.Company == "Microsoft Corporation");
 		}
 
 		public List<IPropertyViewModel> Properties { get; set; }

@@ -39,10 +39,10 @@ namespace JustObjectsPrototype.UI.Editors
 		public static string ToStringOrJson(object value)
 		{
 			var type = value.GetType();
-			var toString = type.GetMethod("ToString");
-			if (toString != null && toString.DeclaringType == type)
+			var toStrings = type.GetMethods().Where(m => m.Name == "ToString" && m.DeclaringType == type && m.GetParameters().Length == 0);
+			if (toStrings.Any())
 			{
-				return toString.Invoke(value, new object[0]).ToString();
+				return toStrings.First().Invoke(value, new object[0]).ToString();
 			}
 
 			var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(p => p.GetIndexParameters().Length == 0);

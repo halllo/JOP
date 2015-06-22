@@ -9,7 +9,9 @@ namespace JustObjectsPrototype.UI.Editors
 	{
 		public static List<IPropertyViewModel> Of(Type type, Objects objects, ObjectProxy selectedObject)
 		{
-			var properties = type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+			var properties = type
+				.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
+				.Where(p => p.GetIndexParameters().Length == 0);
 
 			var propertiesViewModels =
 				from property in properties
