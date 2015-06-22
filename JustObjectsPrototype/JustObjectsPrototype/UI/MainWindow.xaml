@@ -58,6 +58,7 @@
 		</Ribbon>
 
 		<ListBox Grid.Column="0" Grid.Row="1" Grid.RowSpan="2"
+				 BorderThickness="0,0,1,0"
 				 ItemsSource="{Binding Types}" SelectedItem="{Binding SelectedType}">
 			<ListBox.ItemTemplate>
 				<DataTemplate>
@@ -69,6 +70,7 @@
 
 		<DataGrid Grid.Column="1" Grid.Row="1" 
 				  Style="{StaticResource GrayGridLines}" IsReadOnly="True"
+				  VerticalScrollBarVisibility="Visible" BorderThickness="0,0,0,1"
 				  ItemsSource="{Binding Objects}" SelectionMode="Single" SelectedItem="{Binding SelectedObject}" 
 				  AutoGenerateColumns="False" local:DataGridColumnsBehavior.BindableColumns="{Binding Columns}"/>
 
