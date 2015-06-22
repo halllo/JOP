@@ -17,7 +17,7 @@ public class Invoice
 
    public void Increase()
    {
-      Betrag += 1;
+      Amount += 1;
    }
 }
 public class Customer
