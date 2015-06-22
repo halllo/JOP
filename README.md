@@ -6,6 +6,38 @@ Create only your domain objects and get a prototype shell for free.
 [![NuGet downloads](https://img.shields.io/nuget/dt/JOP.svg)](https://www.nuget.org/packages/JOP)
 [![Version](https://img.shields.io/nuget/v/JOP.svg)](https://www.nuget.org/packages/JOP)
 
+How To Use
+----------
+Just create a new .NET 4.5 Console Application and add POCO classes for your prototype domain types, like in the example below.
+```csharp
+public class Invoice
+{
+   public Customer Receiver { get; set; }
+   public decimal Amount { get; set; }
+
+   public void Increase()
+   {
+      Betrag += 1;
+   }
+}
+public class Customer
+{
+   public string Name { get; set; }
+}
+```
+Now that you modelled your prototype domain, "Install-Package JOP" and show the prototype UI.
+```csharp
+[STAThreadAttribute()]
+public static void Main()
+{
+   JustObjectsPrototype.Show.With(new List<object> {}, new List<Type> { typeof(Invoice), typeof(Customer) });
+}
+```
+This gets you a UI like in the screenshot below, with no predefined objects and your two types. You can then create and delete instances of your types and invoke their methods.
+![Screenshot](https://raw.github.com/halllo/JOP/master/screenshot.png)
+
+Happy prototyping!
+
 
 Thanks
 ------
