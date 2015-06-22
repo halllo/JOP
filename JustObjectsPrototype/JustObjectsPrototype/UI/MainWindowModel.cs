@@ -130,32 +130,31 @@ namespace JustObjectsPrototype.UI
 										if (result != null)
 										{
 											var resultType = result.GetType();
-											if (IsMicrosoftType(resultType) == false)
+
+											if (resultType.IsGenericType
+												&& (resultType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
+													||
+													resultType.GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IEnumerable)))
+												&& resultType.GetGenericArguments().Any()
+												&& resultType.GetGenericArguments().First().IsValueType == false
+												&& IsMicrosoftType(resultType.GetGenericArguments().First()) == false)
 											{
-												if (resultType.IsGenericType
-													&& (resultType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
-														||
-														resultType.GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IEnumerable)))
-													&& resultType.GetGenericArguments().Any()
-													&& resultType.GetGenericArguments().First().IsValueType)
+												var resultItemType = resultType.GetGenericArguments().First();
+												var objectsOfType = _Objects.OfType(resultItemType);
+												foreach (var resultItem in (IEnumerable)result)
 												{
-													var resultItemType = resultType.GetGenericArguments().First();
-													var objectsOfType = _Objects.OfType(resultItemType);
-													foreach (var resultItem in (IEnumerable)result)
+													if (resultItem != null && objectsOfType.All(o => !o.ProxiedObject.Equals(resultItem)))
 													{
-														if (resultItem != null && objectsOfType.All(o => !o.ProxiedObject.Equals(resultItem)))
-														{
-															objectsOfType.Add(new ObjectProxy(resultItem));
-														}
+														objectsOfType.Add(new ObjectProxy(resultItem));
 													}
 												}
-												if (resultType.IsValueType == false)
+											}
+											if (resultType.IsValueType == false && IsMicrosoftType(resultType) == false)
+											{
+												var objectsOfType = _Objects.OfType(resultType);
+												if (objectsOfType.All(o => !o.ProxiedObject.Equals(result)))
 												{
-													var objectsOfType = _Objects.OfType(resultType);
-													if (objectsOfType.All(o => !o.ProxiedObject.Equals(result)))
-													{
-														objectsOfType.Add(new ObjectProxy(result));
-													}
+													objectsOfType.Add(new ObjectProxy(result));
 												}
 											}
 										}
