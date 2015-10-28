@@ -5,6 +5,8 @@ namespace JustObjectsPrototype.UI.Editors
 {
 	public class DateTimePropertyViewModel : SimpleTypePropertyViewModel { }
 
+	public class BooleanPropertyViewModel : SimpleTypePropertyViewModel { }
+
 	public class SimpleTypePropertyViewModel : ViewModel, IPropertyViewModel
 	{
 		public ObjectProxy Instance { private get; set; }

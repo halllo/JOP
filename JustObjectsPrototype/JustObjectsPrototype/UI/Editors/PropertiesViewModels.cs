@@ -17,6 +17,8 @@ namespace JustObjectsPrototype.UI.Editors
 				from property in properties
 				select property.CanRead && property.PropertyType == typeof(DateTime) ? (IPropertyViewModel)new DateTimePropertyViewModel { Instance = selectedObject, Property = property }
 
+					 : property.CanRead && property.PropertyType == typeof(bool) ? (IPropertyViewModel)new BooleanPropertyViewModel { Instance = selectedObject, Property = property }
+
 					 : property.CanRead && property.PropertyType == typeof(string) ? (IPropertyViewModel)new SimpleTypePropertyViewModel { Instance = selectedObject, Property = property }
 
 					 : property.CanRead

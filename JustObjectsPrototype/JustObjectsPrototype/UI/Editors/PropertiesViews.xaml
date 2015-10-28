@@ -50,18 +50,26 @@
 				</DataGrid.Columns>
 			</DataGrid>
 		</Grid>
-	</DataTemplate>
-	<DataTemplate DataType="{x:Type local:DateTimePropertyViewModel}">
-		<Grid Margin="10,10,0,10">
-			<Grid.RowDefinitions>
-				<RowDefinition/>
-				<RowDefinition/>
-			</Grid.RowDefinitions>
-			<TextBlock Grid.Row="0" Text="{Binding Label}" Foreground="Gray"/>
-			<DatePicker Grid.Row="1" SelectedDate="{Binding Value}" IsEnabled="{Binding CanWrite}"/>
-		</Grid>
-	</DataTemplate>
-	<DataTemplate DataType="{x:Type local:ReferenceTypePropertyViewModel}">
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type local:DateTimePropertyViewModel}">
+        <Grid Margin="10,10,0,10">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Text="{Binding Label}" Foreground="Gray"/>
+            <DatePicker Grid.Row="1" SelectedDate="{Binding Value}" IsEnabled="{Binding CanWrite}"/>
+        </Grid>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type local:BooleanPropertyViewModel}">
+        <Grid Margin="10,10,0,10">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <CheckBox Content="{Binding Label}" Foreground="Gray" IsChecked="{Binding Value}" IsEnabled="{Binding CanWrite}"/>
+        </Grid>
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type local:ReferenceTypePropertyViewModel}">
 		<Grid Margin="10,10,0,10">
 			<Grid.RowDefinitions>
 				<RowDefinition/>

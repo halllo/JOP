@@ -75,6 +75,12 @@ namespace JustObjectsPrototype.Sample
 	{
 		public Kunde Empfänger { get; set; }
 		public decimal Betrag { get; set; }
+		bool _Bezahlt;
+		public bool Bezahlt
+		{
+			get { return _Bezahlt; }
+			set { _Bezahlt = value; }
+		}
 		public IEnumerable<string> Strings { get; set; }
 		public IEnumerable<decimal> Decimals { get; set; }
 
@@ -121,7 +127,7 @@ namespace JustObjectsPrototype.Sample
 			MessageBox.Show("Hallo " + string.Join(", ", kunden.ConvertAll(k => k.Vorname + " " + k.Nachname)));
 		}
 
-		public Brief Schreiben(string inhalt)
+		public Brief Schreiben(string inhalt, bool wirklich)
 		{
 			return new Brief { Inhalt = inhalt };
 		}

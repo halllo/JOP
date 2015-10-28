@@ -60,7 +60,10 @@ namespace JustObjectsPrototype.UI
 				var properties = selectedType
 					.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
 					.Where(p => p.GetIndexParameters().Length == 0);
-				var columns = properties.Select(p => new DataGridTextColumn { Header = p.Name, Binding = new Binding(p.Name) }).ToList();
+				var columns = properties.Select(p => 
+					p.PropertyType == typeof(bool) ? (DataGridColumn)new DataGridCheckBoxColumn { Header = p.Name, Binding = new Binding(p.Name) }
+													: (DataGridColumn)new DataGridTextColumn { Header = p.Name, Binding = new Binding(p.Name) }
+				).ToList();
 				Columns.Clear();
 				foreach (var column in columns) Columns.Add(column);
 
