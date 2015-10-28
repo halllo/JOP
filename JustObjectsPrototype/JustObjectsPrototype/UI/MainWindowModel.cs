@@ -14,10 +14,12 @@ namespace JustObjectsPrototype.UI
 	public class MainWindowModel : ViewModel
 	{
 		Objects _Objects;
+		Settings _Settings;
 
-		public MainWindowModel(ICollection<object> objects, List<Type> types)
+		public MainWindowModel(ICollection<object> objects, List<Type> types, Settings settings)
 		{
 			_Objects = new Objects(objects);
+			_Settings = settings;
 
 			Columns = new ObservableCollection<DataGridColumn>();
 			Types = types != null ? new ObservableCollection<Type>(types) : _Objects.Types;
@@ -33,14 +35,14 @@ namespace JustObjectsPrototype.UI
 					SelectedObject = newProxy;
 					Changed(() => SelectedObject);
 				},
-				canExecute: () => SelectedType != null);
+				canExecute: () => SelectedType != null && _Settings.IsAllowNew(SelectedType));
 			Delete = new Command(
 				execute: () =>
 				{
 					if (MessageBoxResult.Yes == MessageBox.Show("Are you sure?", "Delete object", MessageBoxButton.YesNo))
 						Objects.Remove(SelectedObject);
 				},
-				canExecute: () => SelectedType != null && SelectedObject != null);
+				canExecute: () => SelectedType != null && SelectedObject != null && _Settings.IsAllowDelete(SelectedType));
 		}
 
 

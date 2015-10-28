@@ -6,9 +6,9 @@ namespace JustObjectsPrototype
 {
 	public static class Show
 	{
-		public static void With(ICollection<object> objects, List<Type> types = null)
+		public static void With(ICollection<object> objects, List<Type> types = null, Settings settings = null)
 		{
-			var windowModel = new MainWindowModel(objects, types)
+			var windowModel = new MainWindowModel(objects, types, settings ?? Settings.Default)
 			{
 				ShowMethodInvocationDialog = dataContext =>
 				{

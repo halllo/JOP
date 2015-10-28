@@ -32,7 +32,11 @@ namespace JustObjectsPrototype.Sample
 				},
 			};
 
-			Show.With(objects);
+			Show.With(objects, settings: UI.Settings.New(s =>
+			{
+				s.AllowNew[typeof(Akte)] = false;
+				s.AllowDelete[typeof(Akte)] = false;
+			}));
 		}
 	}
 

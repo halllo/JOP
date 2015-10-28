@@ -69,6 +69,7 @@
       <DependentUpon>MethodInvocationDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\MethodInvocationDialogModel.cs" />
+    <Compile Include="UI\Settings.cs" />
     <Compile Include="UI\ViewModel.cs" />
     <Compile Include="Show.cs" />
     <Page Include="UI\Editors\PropertiesViews.xaml">
