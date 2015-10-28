@@ -64,6 +64,11 @@ namespace JustObjectsPrototype.UI
 				Columns.Clear();
 				foreach (var column in columns) Columns.Add(column);
 
+				var staticMethods = selectedType.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+				var staticFunctions = GetFunctions(null, staticMethods);
+				Functions = staticFunctions.ToList();
+
+				Changed(() => Functions);
 				Changed(() => Objects);
 				New.RaiseCanExecuteChanged();
 				Delete.RaiseCanExecuteChanged();
@@ -89,91 +94,96 @@ namespace JustObjectsPrototype.UI
 
 					Properties = PropertiesViewModels.Of(type, _Objects, selectedObject);
 
+					var staticMethods = selectedType.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+					var staticFunctions = GetFunctions(null, staticMethods);
 					var methods = type.GetMethods(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-					var functions = from m in methods
-									where m.DeclaringType != typeof(object)
-									where m.IsSpecialName == false
-									select Tuple.Create(m.Name, new Command(() =>
-									{
-										var parameters = m.GetParameters();
-										var runtimeTypeForParameters = TypeCreator.New(m.Name, parameters.ToDictionary(p => p.Name, p => p.ParameterType));
-										var runtimeTypeForParametersInstance = Activator.CreateInstance(runtimeTypeForParameters);
-										var propertiesViewModels = PropertiesViewModels
-											.Of(runtimeTypeForParameters, _Objects, new ObjectProxy(runtimeTypeForParametersInstance))
-											.Where(p => IsObservableCollection(p.ValueType) == false).ToList();
-										if (parameters.Any(p => IsObservableCollection(p.ParameterType) == false))
-										{
-											var dialogResult = ShowMethodInvocationDialog(new MethodInvocationDialogModel
-											{
-												MethodName = m.Name,
-												Properties = propertiesViewModels
-											});
-											if (dialogResult != true) return;
-
-										}
-										var runtimeTypeForParametersProperties = runtimeTypeForParameters.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
-										var parameterInstances = runtimeTypeForParametersProperties.Select(p => IsObservableCollection(p.PropertyType)
-											? _Objects.OfType_OneWayToSourceChangePropagation(p.PropertyType.GetGenericArguments().First())
-											: p.GetValue(runtimeTypeForParametersInstance)).ToList();
-
-										object result = null;
-										try
-										{
-											result = m.Invoke(selectedObject.ProxiedObject, parameterInstances.ToArray());
-										}
-										catch (TargetInvocationException tie)
-										{
-											MessageBox.Show("An Exception occured in " + m.Name + ".\n\n" + tie.InnerException.ToString(), "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
-											return;
-										}
-
-										if (result != null)
-										{
-											var resultType = result.GetType();
-
-											if (resultType.IsGenericType
-												&& (resultType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
-													||
-													resultType.GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IEnumerable)))
-												&& resultType.GetGenericArguments().Any()
-												&& resultType.GetGenericArguments().First().IsValueType == false
-												&& IsMicrosoftType(resultType.GetGenericArguments().First()) == false)
-											{
-												var resultItemType = resultType.GetGenericArguments().First();
-												var objectsOfType = _Objects.OfType(resultItemType);
-												foreach (var resultItem in (IEnumerable)result)
-												{
-													if (resultItem != null && objectsOfType.All(o => !o.ProxiedObject.Equals(resultItem)))
-													{
-														objectsOfType.Add(new ObjectProxy(resultItem));
-													}
-												}
-											}
-											if (resultType.IsValueType == false && IsMicrosoftType(resultType) == false)
-											{
-												var objectsOfType = _Objects.OfType(resultType);
-												if (objectsOfType.All(o => !o.ProxiedObject.Equals(result)))
-												{
-													objectsOfType.Add(new ObjectProxy(result));
-												}
-											}
-										}
-										selectedObject.RaisePropertyChanged(string.Empty);
-										Properties.ForEach(p => p.RaiseChanged());
-									}));
-
-					Functions = functions.ToList();
+					var functions = GetFunctions(selectedObject, methods);
+					Functions = staticFunctions.Union(functions).ToList();
 				}
 				else
 				{
 					Properties = new List<IPropertyViewModel>();
-					Functions = new List<Tuple<string, Command>>();
 				}
 
 				Changed(() => Properties);
 				Changed(() => Functions);
 				Delete.RaiseCanExecuteChanged();
 			}
+		}
+
+		IEnumerable<Tuple<string, Command>> GetFunctions(ObjectProxy instance, MethodInfo[] methods)
+		{
+			return from m in methods
+				   where m.DeclaringType != typeof(object)
+				   where m.IsSpecialName == false
+				   select Tuple.Create(m.Name, new Command(() =>
+				   {
+					   var parameters = m.GetParameters();
+					   var runtimeTypeForParameters = TypeCreator.New(m.Name, parameters.ToDictionary(p => p.Name, p => p.ParameterType));
+					   var runtimeTypeForParametersInstance = Activator.CreateInstance(runtimeTypeForParameters);
+					   var propertiesViewModels = PropertiesViewModels
+						   .Of(runtimeTypeForParameters, _Objects, new ObjectProxy(runtimeTypeForParametersInstance))
+						   .Where(p => IsObservableCollection(p.ValueType) == false).ToList();
+					   if (parameters.Any(p => IsObservableCollection(p.ParameterType) == false))
+					   {
+						   var dialogResult = ShowMethodInvocationDialog(new MethodInvocationDialogModel
+						   {
+							   MethodName = m.Name,
+							   Properties = propertiesViewModels
+						   });
+						   if (dialogResult != true) return;
+
+					   }
+					   var runtimeTypeForParametersProperties = runtimeTypeForParameters.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+					   var parameterInstances = runtimeTypeForParametersProperties.Select(p => IsObservableCollection(p.PropertyType)
+						   ? _Objects.OfType_OneWayToSourceChangePropagation(p.PropertyType.GetGenericArguments().First())
+						   : p.GetValue(runtimeTypeForParametersInstance)).ToList();
+
+					   object result = null;
+					   try
+					   {
+						   result = m.Invoke(instance != null ? instance.ProxiedObject : null, parameterInstances.ToArray());
+					   }
+					   catch (TargetInvocationException tie)
+					   {
+						   MessageBox.Show("An Exception occured in " + m.Name + ".\n\n" + tie.InnerException.ToString(), "Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+						   return;
+					   }
+
+					   if (result != null)
+					   {
+						   var resultType = result.GetType();
+
+						   if (resultType.IsGenericType
+							   && (resultType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
+								   ||
+								   resultType.GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IEnumerable)))
+							   && resultType.GetGenericArguments().Any()
+							   && resultType.GetGenericArguments().First().IsValueType == false
+							   && IsMicrosoftType(resultType.GetGenericArguments().First()) == false)
+						   {
+							   var resultItemType = resultType.GetGenericArguments().First();
+							   var objectsOfType = _Objects.OfType(resultItemType);
+							   foreach (var resultItem in (IEnumerable)result)
+							   {
+								   if (resultItem != null && objectsOfType.All(o => !o.ProxiedObject.Equals(resultItem)))
+								   {
+									   objectsOfType.Add(new ObjectProxy(resultItem));
+								   }
+							   }
+						   }
+						   if (resultType.IsValueType == false && IsMicrosoftType(resultType) == false)
+						   {
+							   var objectsOfType = _Objects.OfType(resultType);
+							   if (objectsOfType.All(o => !o.ProxiedObject.Equals(result)))
+							   {
+								   objectsOfType.Add(new ObjectProxy(result));
+							   }
+						   }
+					   }
+					   if (instance != null) instance.RaisePropertyChanged(string.Empty);
+					   if (Properties != null) Properties.ForEach(p => p.RaiseChanged());
+				   }));
 		}
 
 		static bool IsObservableCollection(Type type)
