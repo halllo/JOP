@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:local="clr-namespace:JustObjectsPrototype.UI"
 		xmlns:localEditors="clr-namespace:JustObjectsPrototype.UI.Editors"
-        Title="JOP - JustObjectsPrototype" Height="600" Width="1024" Icon="Resources/marketing8.png">
+        Title="JOP - JustObjectsPrototype" Height="700" Width="1024" Icon="Resources/marketing8.png">
 	<Grid>
 		<Grid.Resources>
 			<Style TargetType="DataGrid" x:Key="GrayGridLines">
@@ -30,15 +30,17 @@
 
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
-			<RowDefinition/>
-			<RowDefinition/>
+			<RowDefinition />
+            <RowDefinition Height="5"/>
+            <RowDefinition />
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="150"/>
-			<ColumnDefinition/>
+            <ColumnDefinition Width="1*"/>
+			<ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="6*"/>
 		</Grid.ColumnDefinitions>
 
-		<Ribbon Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0">
+		<Ribbon Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0">
 			<Ribbon.HelpPaneContent>
 				<RibbonButton Label="all objects" Command="{Binding Diagnose}"/>
 			</Ribbon.HelpPaneContent>
@@ -57,7 +59,7 @@
 			</RibbonTab>
 		</Ribbon>
 
-		<ListBox Grid.Column="0" Grid.Row="1" Grid.RowSpan="2"
+		<ListBox Grid.Column="0" Grid.Row="1" Grid.RowSpan="3"
 				 BorderThickness="0,0,1,0"
 				 ItemsSource="{Binding Types}" SelectedItem="{Binding SelectedType}">
 			<ListBox.ItemTemplate>
@@ -65,17 +67,19 @@
 					<TextBlock Text="{Binding Name}"/>
 				</DataTemplate>
 			</ListBox.ItemTemplate>
-
 		</ListBox>
+        
+		<GridSplitter Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" Width="5" HorizontalAlignment="Stretch" />
 
-		<DataGrid Grid.Column="1" Grid.Row="1" 
-				  Style="{StaticResource GrayGridLines}" IsReadOnly="True"
+        <DataGrid Grid.Column="2" Grid.Row="1" 
+				  Style="{StaticResource GrayGridLines}" IsReadOnly="True" Background="WhiteSmoke"
 				  VerticalScrollBarVisibility="Visible" BorderThickness="0,0,0,1"
 				  ItemsSource="{Binding Objects}" SelectionMode="Single" SelectedItem="{Binding SelectedObject}" 
 				  AutoGenerateColumns="False" local:DataGridColumnsBehavior.BindableColumns="{Binding Columns}"/>
 
+        <GridSplitter Grid.Column="2" Grid.Row="2" Height="5" HorizontalAlignment="Stretch" />
 
-		<ScrollViewer Grid.Column="1" Grid.Row="2" Background="WhiteSmoke">
+        <ScrollViewer Grid.Column="2" Grid.Row="3" Background="WhiteSmoke">
 			<ItemsControl ItemsSource="{Binding Properties}" Padding="20" Focusable="True" TabIndex="9999">
 				<ItemsControl.ItemsPanel>
 					<ItemsPanelTemplate>

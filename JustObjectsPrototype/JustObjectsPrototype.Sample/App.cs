@@ -68,10 +68,12 @@ namespace JustObjectsPrototype.Sample
 			akten.Clear();
 		}
 
-		public static void NeuErzeugen(ObservableCollection<Akte> akten)
+		public static void NeuErzeugen(ObservableCollection<Akte> akten, int wieviele)
 		{
-			akten.Add(new Akte { Name = "Neue Akte 1", Datum = DateTime.Today });
-			akten.Add(new Akte { Name = "Neue Akte 2", Datum = DateTime.Today });
+			for (int i = 0; i < wieviele; i++)
+			{
+				akten.Add(new Akte { Name = "Neue Akte " + (i + 1), Datum = DateTime.Now });
+			}
 		}
 	}
 
