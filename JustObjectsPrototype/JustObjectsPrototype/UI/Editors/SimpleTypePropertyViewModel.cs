@@ -15,7 +15,7 @@ namespace JustObjectsPrototype.UI.Editors
 
 		public bool CanWrite
 		{
-			get { return Property.CanWrite; }
+			get { return Property.CanWrite && Property.SetMethod.IsPublic; }
 		}
 
 		public string Label { get { return Property.Name; } }

@@ -85,6 +85,7 @@ namespace JustObjectsPrototype.Sample
 			get { return _Bezahlt; }
 			set { _Bezahlt = value; }
 		}
+		public bool BezahltSchreibgeschützt { get { return Bezahlt; } }
 		public IEnumerable<string> Strings { get; set; }
 		public IEnumerable<decimal> Decimals { get; set; }
 
