@@ -9,7 +9,22 @@ namespace JustObjectsPrototype.UI.Editors
 {
 	public class SimpleTypeListPropertyViewModel : ViewModel, IPropertyViewModel
 	{
-		public ObjectProxy Instance { private get; set; }
+		ObjectProxy _Instance;
+		public ObjectProxy Instance
+		{
+			private get { return _Instance; }
+			set
+			{
+				_Instance = value;
+				_Instance.PropertyChanged += (s, e) =>
+				{
+					if (e.PropertyName == Property.Name || e.PropertyName == string.Empty)
+					{
+						Changed(() => Value);
+					}
+				};
+			}
+		}
 		public PropertyInfo Property { private get; set; }
 		public Action ChangeCallback { private get; set; }
 
@@ -94,7 +109,7 @@ namespace JustObjectsPrototype.UI.Editors
 			Changed(() => Error);
 		}
 
-		public void RaiseChanged()
+		public void Refresh()
 		{
 			collection = null;
 			Changed(() => Value);

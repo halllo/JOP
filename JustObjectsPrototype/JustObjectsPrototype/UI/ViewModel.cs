@@ -17,7 +17,13 @@ namespace JustObjectsPrototype.UI
 			if (body == null)
 				throw new ArgumentException("The body must be a member expression");
 
-			PropertyChanged(this, new PropertyChangedEventArgs(body.Member.Name));
+			Changed(body.Member.Name);
+        }
+
+		protected virtual void Changed(string memberName)
+		{
+			var pc = PropertyChanged;
+			if (pc != null) PropertyChanged(this, new PropertyChangedEventArgs(memberName));
 		}
 	}
 }

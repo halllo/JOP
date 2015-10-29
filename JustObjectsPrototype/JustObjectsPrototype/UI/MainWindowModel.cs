@@ -187,7 +187,7 @@ namespace JustObjectsPrototype.UI
 						   }
 					   }
 					   if (instance != null) instance.RaisePropertyChanged(string.Empty);
-					   if (Properties != null) Properties.ForEach(p => p.RaiseChanged());
+					   if (Properties != null) Properties.ForEach(p => p.Refresh());
 				   }));
 		}
 

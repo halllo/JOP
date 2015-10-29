@@ -7,6 +7,6 @@ namespace JustObjectsPrototype.UI.Editors
 		string Label { get; }
 		object Value { get; }
 		Type ValueType { get; }
-		void RaiseChanged();
+		void Refresh();
 	}
 }
