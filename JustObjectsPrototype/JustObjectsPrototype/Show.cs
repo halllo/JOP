@@ -14,7 +14,7 @@ namespace JustObjectsPrototype
 			return collection;
 		}
 
-        public static void With(ICollection<object> objects, Settings settings = null)
+		public static void With(ICollection<object> objects, Settings settings = null)
 		{
 			var windowModel = new MainWindowModel(objects, settings ?? Settings.Default)
 			{
