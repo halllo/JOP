@@ -10,8 +10,7 @@ namespace JustObjectsPrototype.Sample
 		[STAThreadAttribute()]
 		public static void Main()
 		{
-
-			var objects = new System.Collections.ObjectModel.ObservableCollection<object>
+			var objects = new ObservableCollection<object>
 			{
 				new Akte { Name = "Akte 1", Datum = DateTime.Now },
 				new Akte { Name = "Akte 2" },
