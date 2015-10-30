@@ -15,9 +15,12 @@ namespace JustObjectsPrototype.UI
 		public static Settings Default { get { return new Settings(); } }
 		private Settings()
 		{
+			DisplayedTypes = new List<Type>();
 			AllowNew = new Dictionary<Type, bool>();
 			AllowDelete = new Dictionary<Type, bool>();
 		}
+
+		public List<Type> DisplayedTypes { get; set; }
 
 		public Dictionary<Type, bool> AllowNew { get; set; }
 		internal bool IsAllowNew(Type type)

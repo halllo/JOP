@@ -16,13 +16,13 @@ namespace JustObjectsPrototype.UI
 		Objects _Objects;
 		Settings _Settings;
 
-		public MainWindowModel(ICollection<object> objects, List<Type> types, Settings settings)
+		public MainWindowModel(ICollection<object> objects, Settings settings)
 		{
 			_Objects = new Objects(objects);
 			_Settings = settings;
 
 			Columns = new ObservableCollection<DataGridColumn>();
-			Types = types != null ? new ObservableCollection<Type>(types) : _Objects.Types;
+			Types = _Settings.DisplayedTypes.Any() ? new ObservableCollection<Type>(_Settings.DisplayedTypes) : _Objects.Types;
 
 			Diagnose = new Command(
 				execute: () => MessageBox.Show("all objects: \n\n\t" + string.Join("\n\t", _Objects.All)));

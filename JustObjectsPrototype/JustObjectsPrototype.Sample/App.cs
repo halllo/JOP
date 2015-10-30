@@ -10,6 +10,7 @@ namespace JustObjectsPrototype.Sample
 		[STAThreadAttribute()]
 		public static void Main()
 		{
+
 			var objects = new System.Collections.ObjectModel.ObservableCollection<object>
 			{
 				new Akte { Name = "Akte 1", Datum = DateTime.Now },
@@ -32,6 +33,7 @@ namespace JustObjectsPrototype.Sample
 				},
 			};
 
+			
 			Show.With(objects, settings: UI.Settings.New(s =>
 			{
 				s.AllowNew[typeof(Akte)] = false;

@@ -1,14 +1,14 @@
 ﻿using JustObjectsPrototype.UI;
-using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace JustObjectsPrototype
 {
 	public static class Show
 	{
-		public static void With(ICollection<object> objects, List<Type> types = null, Settings settings = null)
+        public static void With(ICollection<object> objects, Settings settings = null)
 		{
-			var windowModel = new MainWindowModel(objects, types, settings ?? Settings.Default)
+			var windowModel = new MainWindowModel(objects, settings ?? Settings.Default)
 			{
 				ShowMethodInvocationDialog = dataContext =>
 				{

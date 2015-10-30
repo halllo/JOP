@@ -1,75 +1,77 @@
-﻿<RibbonWindow x:Class="JustObjectsPrototype.UI.MainWindow"
+﻿<Window x:Class="JustObjectsPrototype.UI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:local="clr-namespace:JustObjectsPrototype.UI"
 		xmlns:localEditors="clr-namespace:JustObjectsPrototype.UI.Editors"
         Title="JOP - JustObjectsPrototype" Height="700" Width="1024" Icon="Resources/marketing8.png">
-	<Grid>
-		<Grid.Resources>
-			<Style TargetType="DataGrid" x:Key="GrayGridLines">
-				<Setter Property="HorizontalGridLinesBrush" Value="LightGray"/>
-				<Setter Property="VerticalGridLinesBrush" Value="LightGray"/>
-				<Setter Property="CellStyle">
-					<Setter.Value>
-						<Style TargetType="DataGridCell" >
-							<Setter Property="Padding" Value="5"/>
-							<Setter Property="Template">
-								<Setter.Value>
-									<ControlTemplate TargetType="{x:Type DataGridCell}">
-										<Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
-											<ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
-										</Border>
-									</ControlTemplate>
-								</Setter.Value>
-							</Setter>
-						</Style>
-					</Setter.Value>
-				</Setter>
-			</Style>
-		</Grid.Resources>
+    <Grid>
+        <Grid.Resources>
+            <Style TargetType="DataGrid" x:Key="GrayGridLines">
+                <Setter Property="HorizontalGridLinesBrush" Value="LightGray"/>
+                <Setter Property="VerticalGridLinesBrush" Value="LightGray"/>
+                <Setter Property="CellStyle">
+                    <Setter.Value>
+                        <Style TargetType="DataGridCell" >
+                            <Setter Property="Padding" Value="5"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                        <Border Padding="{TemplateBinding Padding}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                            <ContentPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </Grid.Resources>
 
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
             <RowDefinition Height="5"/>
             <RowDefinition />
-		</Grid.RowDefinitions>
-		<Grid.ColumnDefinitions>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
-			<ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="6*"/>
-		</Grid.ColumnDefinitions>
+        </Grid.ColumnDefinitions>
 
-		<Ribbon Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0">
-			<Ribbon.HelpPaneContent>
-				<RibbonButton Label="all objects" Command="{Binding Diagnose}"/>
-			</Ribbon.HelpPaneContent>
-			<RibbonTab Header="Main">
-				<RibbonGroup Header="object">
-					<RibbonButton Label="new" Command="{Binding New}" SmallImageSource="Resources/add182.png" LargeImageSource="Resources/add182.png"/>
-					<RibbonButton Label="delete" Command="{Binding Delete}" SmallImageSource="Resources/cross108.png" LargeImageSource="Resources/cross108.png"/>
-				</RibbonGroup>
-				<RibbonGroup Header="methods" ItemsSource="{Binding Functions}">
-					<RibbonGroup.ItemTemplate>
-						<DataTemplate>
-							<RibbonButton Label="{Binding Item1}" Command="{Binding Item2}" LargeImageSource="Resources/computer1.png"/>
-						</DataTemplate>
-					</RibbonGroup.ItemTemplate>
-				</RibbonGroup>
-			</RibbonTab>
-		</Ribbon>
+        <Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0">
+            <Ribbon Margin="0,-22,0,0">
+                <Ribbon.HelpPaneContent>
+                    <RibbonButton Label="all objects" Command="{Binding Diagnose}"/>
+                </Ribbon.HelpPaneContent>
+                <RibbonTab Header="Main">
+                    <RibbonGroup Header="object">
+                        <RibbonButton Label="new" Command="{Binding New}" SmallImageSource="Resources/add182.png" LargeImageSource="Resources/add182.png"/>
+                        <RibbonButton Label="delete" Command="{Binding Delete}" SmallImageSource="Resources/cross108.png" LargeImageSource="Resources/cross108.png"/>
+                    </RibbonGroup>
+                    <RibbonGroup Header="methods" ItemsSource="{Binding Functions}">
+                        <RibbonGroup.ItemTemplate>
+                            <DataTemplate>
+                                <RibbonButton Label="{Binding Item1}" Command="{Binding Item2}" LargeImageSource="Resources/computer1.png"/>
+                            </DataTemplate>
+                        </RibbonGroup.ItemTemplate>
+                    </RibbonGroup>
+                </RibbonTab>
+            </Ribbon>
+        </Grid>
 
-		<ListBox Grid.Column="0" Grid.Row="1" Grid.RowSpan="3"
+        <ListBox Grid.Column="0" Grid.Row="1" Grid.RowSpan="3"
 				 BorderThickness="0,0,1,0"
 				 ItemsSource="{Binding Types}" SelectedItem="{Binding SelectedType}">
-			<ListBox.ItemTemplate>
-				<DataTemplate>
-					<TextBlock Text="{Binding Name}"/>
-				</DataTemplate>
-			</ListBox.ItemTemplate>
-		</ListBox>
-        
-		<GridSplitter Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" Width="5" HorizontalAlignment="Stretch" />
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <GridSplitter Grid.Column="1" Grid.Row="1" Grid.RowSpan="3" Width="5" HorizontalAlignment="Stretch" />
 
         <DataGrid Grid.Column="2" Grid.Row="1" 
 				  Style="{StaticResource GrayGridLines}" IsReadOnly="True" Background="WhiteSmoke"
@@ -80,16 +82,16 @@
         <GridSplitter Grid.Column="2" Grid.Row="2" Height="5" HorizontalAlignment="Stretch" />
 
         <ScrollViewer Grid.Column="2" Grid.Row="3" Background="WhiteSmoke">
-			<ItemsControl ItemsSource="{Binding Properties}" Padding="20" Focusable="True" TabIndex="9999">
-				<ItemsControl.ItemsPanel>
-					<ItemsPanelTemplate>
-						<StackPanel Orientation="Vertical"/>
-					</ItemsPanelTemplate>
-				</ItemsControl.ItemsPanel>
-				<ItemsControl.Resources>
-					<ResourceDictionary Source="Editors/PropertiesViews.xaml" />
-				</ItemsControl.Resources>
-			</ItemsControl>
-		</ScrollViewer>
-	</Grid>
-</RibbonWindow>
+            <ItemsControl ItemsSource="{Binding Properties}" Padding="20" Focusable="True" TabIndex="9999">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.Resources>
+                    <ResourceDictionary Source="Editors/PropertiesViews.xaml" />
+                </ItemsControl.Resources>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</Window>
