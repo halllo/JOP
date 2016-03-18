@@ -50,7 +50,7 @@ namespace JustObjectsPrototype.UI.Editors
 		{
 			get
 			{
-				return Property.GetValue(Instance.ProxiedObject);
+				return Property.GetValue(Instance.ProxiedObject) ?? NullEntry;
 			}
 			set
 			{

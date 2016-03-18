@@ -18,11 +18,11 @@ namespace JustObjectsPrototype.UI.Editors
 		private static void DisplayObjectChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
 		{
 			var od = sender as ObjectDisplay;
-			if (e.NewValue == null 
-				|| 
+			if (e.NewValue == null
+				||
 				(
-					e.NewValue != null 
-					&& 
+					e.NewValue != null
+					&&
 					(
 						e.NewValue == ReferenceTypePropertyViewModel.NullEntry
 						||
@@ -31,9 +31,13 @@ namespace JustObjectsPrototype.UI.Editors
 						(e.NewValue is string && e.NewValue as string == string.Empty)
 					)
 				))
-				return;
-
-			od.Text = ToStringOrJson(e.NewValue);
+			{
+				od.Text = "";
+			}
+			else
+			{
+				od.Text = ToStringOrJson(e.NewValue);
+			}
 		}
 
 		public static string ToStringOrJson(object value)
