@@ -52,5 +52,10 @@ namespace JustObjectsPrototype.UI.Editors
 			var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(p => p.GetIndexParameters().Length == 0);
 			return "{" + string.Join(", ", properties.Select(p => p.Name + ": \"" + p.GetValue(value) + "\"")) + "}";
 		}
+
+		public static string Nicely(MemberInfo property)
+		{
+			return property.Name.Replace("_", " ");
+		}
 	}
 }

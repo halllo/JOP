@@ -36,7 +36,7 @@ namespace JustObjectsPrototype.UI.Editors
 			get { return Property.CanWrite && Property.SetMethod.IsPublic; }
 		}
 
-		public string Label { get { return Property.Name; } }
+		public string Label { get { return ObjectDisplay.Nicely(Property); } }
 
 		public IEnumerable<object> References
 		{

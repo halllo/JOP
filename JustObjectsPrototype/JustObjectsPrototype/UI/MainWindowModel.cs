@@ -29,11 +29,18 @@ namespace JustObjectsPrototype.UI
 			New = new Command(
 				execute: () =>
 				{
-					var newObject = Activator.CreateInstance(SelectedType);
-					var newProxy = new ObjectProxy(newObject);
-					Objects.Add(newProxy);
-					SelectedObject = newProxy;
-					Changed(() => SelectedObject);
+					try
+					{
+						var newObject = Activator.CreateInstance(SelectedType);
+						var newProxy = new ObjectProxy(newObject);
+						Objects.Add(newProxy);
+						SelectedObject = newProxy;
+						Changed(() => SelectedObject);
+					}
+					catch (Exception)
+					{
+						MessageBox.Show("Object creation with this constructor is not supported yet.", "missing feature", MessageBoxButton.OK, MessageBoxImage.Information);
+					}
 				},
 				canExecute: () => SelectedType != null && _Settings.IsAllowNew(SelectedType));
 			Delete = new Command(
@@ -63,8 +70,8 @@ namespace JustObjectsPrototype.UI
 					.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
 					.Where(p => p.GetIndexParameters().Length == 0);
 				var columns = properties.Select(p =>
-					p.PropertyType == typeof(bool) ? (DataGridColumn)new DataGridCheckBoxColumn { Header = p.Name, Binding = new Binding(p.Name) }
-													: (DataGridColumn)new DataGridTextColumn { Header = p.Name, Binding = new Binding(p.Name) }
+					p.PropertyType == typeof(bool) ? (DataGridColumn)new DataGridCheckBoxColumn { Header = ObjectDisplay.Nicely(p), Binding = new Binding(p.Name) }
+													: (DataGridColumn)new DataGridTextColumn { Header = ObjectDisplay.Nicely(p), Binding = new Binding(p.Name) }
 				).ToList();
 				Columns.Clear();
 				foreach (var column in columns) Columns.Add(column);
@@ -122,7 +129,7 @@ namespace JustObjectsPrototype.UI
 				   where m.DeclaringType != typeof(object)
 				   where m.IsSpecialName == false
 				   where m.Name != "ToString"
-				   select Tuple.Create(m.Name, new Command(() =>
+				   select Tuple.Create(ObjectDisplay.Nicely(m), new Command(() =>
 				   {
 					   var parameters = m.GetParameters();
 					   var runtimeTypeForParameters = TypeCreator.New(m.Name, parameters.ToDictionary(p => p.Name, p => p.ParameterType));

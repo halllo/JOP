@@ -50,25 +50,25 @@ namespace JustObjectsPrototype.Sample
 		public Kunde Mandant { get { return mandant; } }
 		public DateTime Datum { get; set; }
 
-		public void RechnungenLöschen(ObservableCollection<Rechnung> rechnungen)
+		public void Rechnungen_Löschen(ObservableCollection<Rechnung> rechnungen)
 		{
 			MessageBox.Show("Löschen: " + rechnungen.Count + " Rechnungen");
 			rechnungen.Clear();
 			MessageBox.Show("Gelöscht: " + rechnungen.Count + " Rechnungen");
 		}
 
-		public void BriefeSchreiben(ObservableCollection<Brief> briefe)
+		public void Briefe_Schreiben(ObservableCollection<Brief> briefe, Kunde autor)
 		{
 			MessageBox.Show(briefe.Count + " Briefe?");
-			briefe.Add(new Brief { Inhalt = "Hallo Welt" });
+			briefe.Add(new Brief(autor) { Inhalt = "Hallo Welt" });
 		}
 
-		public static void AlleLöschen(ObservableCollection<Akte> akten)
+		public static void Alle_Löschen(ObservableCollection<Akte> akten)
 		{
 			akten.Clear();
 		}
 
-		public static void NeuErzeugen(ObservableCollection<Akte> akten, int wieviele)
+		public static void Neu_Erzeugen(ObservableCollection<Akte> akten, int wieviele)
 		{
 			for (int i = 0; i < wieviele; i++)
 			{
@@ -109,7 +109,7 @@ namespace JustObjectsPrototype.Sample
 			return $"{Vorname} {Nachname}".Trim();
 		}
 
-		public List<Kunde> NeuerFreund()
+		public List<Kunde> Neuer_Freund()
 		{
 			var kunde = new Kunde { Vorname = "Neuer" + DateTime.Now.Ticks, Nachname = "Freund" + DateTime.Now.Ticks };
 			Freunde.Add(kunde);
@@ -134,20 +134,27 @@ namespace JustObjectsPrototype.Sample
 			MessageBox.Show("Zahlen: " + string.Join(", ", zahlen));
 		}
 
-		public void HalloSagen(List<Kunde> kunden)
+		public void Hallo_Sagen(List<Kunde> kunden)
 		{
 			MessageBox.Show("Hallo " + string.Join(", ", kunden.ConvertAll(k => k.Vorname + " " + k.Nachname)));
 		}
 
-		public Brief Schreiben(string inhalt, bool wirklich)
+		public Brief Schreiben(string inhalts_text, bool wirklich)
 		{
-			return new Brief { Inhalt = inhalt };
+			return new Brief(this) { Inhalt = inhalts_text };
 		}
 	}
 
 	public class Brief
 	{
+		public Brief(Kunde autor)
+		{
+			Geschrieben_von = autor;
+		}
+
 		public string Inhalt { get; set; }
+
+		public Kunde Geschrieben_von { get; private set; }
 
 		public int Fünf()
 		{
