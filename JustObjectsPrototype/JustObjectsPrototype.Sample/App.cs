@@ -106,7 +106,7 @@ namespace JustObjectsPrototype.Sample
 
 		public override string ToString()
 		{
-			return $"{Vorname} {Nachname}".Trim();
+			return (Vorname + " " + Nachname).Trim();
 		}
 
 		public List<Kunde> Neuer_Freund()
