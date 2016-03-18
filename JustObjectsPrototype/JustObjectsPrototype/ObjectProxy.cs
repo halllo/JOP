@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
@@ -8,7 +10,7 @@ namespace JustObjectsPrototype
 	public class ObjectProxy : DynamicObject, INotifyPropertyChanged
 	{
 		public object ProxiedObject { get; set; }
-		
+
 		public ObjectProxy() { }
 		public ObjectProxy(object proxiedObject)
 		{
@@ -21,7 +23,7 @@ namespace JustObjectsPrototype
 			if (PropertyChanged != null)
 				PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 		}
-	
+
 		public override bool TryConvert(ConvertBinder binder, out object result)
 		{
 			if (binder.Type == typeof(INotifyPropertyChanged))
@@ -64,7 +66,23 @@ namespace JustObjectsPrototype
 
 		private object GetMember(string propertyName)
 		{
-			return GetPropertyInfo(propertyName).GetValue(ProxiedObject, null);
-		} 
+			var result = GetPropertyInfo(propertyName).GetValue(ProxiedObject, null);
+
+			if (result != null)
+			{
+				var resultType = result.GetType();
+				if (resultType.IsGenericType
+					&& (resultType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
+						||
+						resultType.GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IEnumerable)))
+					)
+				{
+					var ie = (IEnumerable)result;
+					return "Count = " + ie.OfType<object>().Count();
+				}
+			}
+
+			return result;
+		}
 	}
 }
