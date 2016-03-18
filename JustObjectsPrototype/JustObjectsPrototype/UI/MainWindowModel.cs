@@ -62,7 +62,7 @@ namespace JustObjectsPrototype.UI
 				var properties = selectedType
 					.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)
 					.Where(p => p.GetIndexParameters().Length == 0);
-				var columns = properties.Select(p => 
+				var columns = properties.Select(p =>
 					p.PropertyType == typeof(bool) ? (DataGridColumn)new DataGridCheckBoxColumn { Header = p.Name, Binding = new Binding(p.Name) }
 													: (DataGridColumn)new DataGridTextColumn { Header = p.Name, Binding = new Binding(p.Name) }
 				).ToList();
@@ -121,6 +121,7 @@ namespace JustObjectsPrototype.UI
 			return from m in methods
 				   where m.DeclaringType != typeof(object)
 				   where m.IsSpecialName == false
+				   where m.Name != "ToString"
 				   select Tuple.Create(m.Name, new Command(() =>
 				   {
 					   var parameters = m.GetParameters();

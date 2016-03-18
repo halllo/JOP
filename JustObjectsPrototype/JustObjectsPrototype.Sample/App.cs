@@ -32,7 +32,6 @@ namespace JustObjectsPrototype.Sample
 				},
 			};
 
-			
 			Show.With(objects, settings: UI.Settings.New(s =>
 			{
 				s.AllowNew[typeof(Akte)] = false;
@@ -104,6 +103,11 @@ namespace JustObjectsPrototype.Sample
 		public string Nachname { get; set; }
 		public Kunde Vertreter { get; set; }
 		public List<Kunde> Freunde { get; set; }
+
+		public override string ToString()
+		{
+			return $"{Vorname} {Nachname}".Trim();
+		}
 
 		public List<Kunde> NeuerFreund()
 		{
