@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 
 namespace JustObjectsPrototype.Sample
@@ -31,6 +32,12 @@ namespace JustObjectsPrototype.Sample
 					Decimals = new List<decimal> { 3.5m, 3.3333m },
 				},
 			};
+
+
+			var akten = objects.OfType<Akte>().ToList();
+			var kunden = objects.OfType<Kunde>().ToList();
+			Show.With(akten, kunden);
+
 
 			Show.With(objects, settings: UI.Settings.New(s =>
 			{
