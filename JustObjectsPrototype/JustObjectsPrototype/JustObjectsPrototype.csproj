@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ObjectProxy.cs" />
+    <Compile Include="Prototype.cs" />
     <Compile Include="TypeCreator.cs" />
     <Compile Include="UI\Command.cs" />
     <Compile Include="Objects.cs" />

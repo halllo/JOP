@@ -36,14 +36,34 @@ namespace JustObjectsPrototype.Sample
 
 			var akten = objects.OfType<Akte>().ToList();
 			var kunden = objects.OfType<Kunde>().ToList();
-			Show.With(akten, kunden);
+			//Show.With(akten, kunden);
+			//Show.With(objects);
+			//Show
+			//	.ViewOf<Akte>().DisableNew().DisableDelete()
+			//	.With(objects);
 
 
-			Show.With(objects, settings: UI.Settings.New(s =>
-			{
-				s.AllowNew[typeof(Akte)] = false;
-				s.AllowDelete[typeof(Akte)] = false;
-			}));
+			var prototype = Show
+				.ViewOf<Akte>()
+					.EnableNew(newed => { MessageBox.Show("neue Akte: " + newed.Name); })
+					.EnableDelete(deleted => { MessageBox.Show("Akte gelöscht: " + deleted.Name); })
+					.OnValueChanged(changed => { MessageBox.Show("Akte geändert: " + changed.Name); })
+				.ViewOf<Kunde>()
+					.DisableNew()
+					.DisableDelete()
+					.OnValueChanged(changed => { MessageBox.Show("Kunde geändert: " + changed); })
+				.With(objects);
+
+
+			/* TODOs:
+			*
+			* changed events raisen
+			* autorefresh nach events
+			* prototype.Refresh();
+			* 
+			* Buttonklicks im ribbon führen noch lostfocus aus.
+			* 
+			*/
 		}
 	}
 

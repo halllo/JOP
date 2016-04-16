@@ -8,30 +8,107 @@ namespace JustObjectsPrototype
 {
 	public static class Show
 	{
-		public static ObservableCollection<object> With(params IEnumerable<object>[] objects)
+		public static Prototype With(params IEnumerable<object>[] objects)
 		{
-			var collection = new ObservableCollection<object>(objects.Aggregate((o1, o2) => o1.Concat(o2)));
-			With(collection, null);
-			return collection;
+			return new PrototypeBuilder().With(objects);
 		}
-
-		public static void With(ICollection<object> objects, Settings settings = null)
+		public static Prototype With(ICollection<object> objects)
 		{
-			if (objects.Any(o => o == null)) throw new ArgumentNullException();
-
-			var windowModel = new MainWindowModel(objects, settings ?? Settings.Default)
+			return new PrototypeBuilder().With(objects);
+		}
+		public static PrototypeBuilder<T> ViewOf<T>()
+		{
+			return new PrototypeBuilder<T>
 			{
-				ShowMethodInvocationDialog = dataContext =>
+				Settings = new Settings
 				{
-					var dialog = new MethodInvocationDialog { DataContext = dataContext };
-					return dialog.ShowDialog();
+					DisplayedTypes = new List<Type> { typeof(T) }
 				}
 			};
-			var window = new MainWindow
+		}
+
+
+		public class PrototypeBuilder
+		{
+			internal PrototypeBuilder()
 			{
-				DataContext = windowModel
-			};
-			window.ShowDialog();
+				Settings = new Settings();
+			}
+
+			internal Settings Settings { get; set; }
+
+			public Prototype With(params IEnumerable<object>[] objects)
+			{
+				var collection = new ObservableCollection<object>(objects.Aggregate((o1, o2) => o1.Concat(o2)));
+				return With(collection); ;
+			}
+			public Prototype With(ICollection<object> objects)
+			{
+				if (objects.Any(o => o == null)) throw new ArgumentNullException();
+
+				var windowModel = new MainWindowModel(objects, Settings)
+				{
+					ShowMethodInvocationDialog = dataContext =>
+					{
+						var dialog = new MethodInvocationDialog { DataContext = dataContext };
+						return dialog.ShowDialog();
+					}
+				};
+				var window = new MainWindow
+				{
+					DataContext = windowModel
+				};
+				window.ShowDialog();
+
+				return new Prototype
+				{
+					Repository = objects is ObservableCollection<object> ? objects as ObservableCollection<object> : new ObservableCollection<object>(objects)
+				};
+			}
+		}
+
+		public class PrototypeBuilder<T> : PrototypeBuilder
+		{
+			internal PrototypeBuilder()
+			{
+			}
+
+			public PrototypeBuilder<TNext> ViewOf<TNext>()
+			{
+				Settings.DisplayedTypes.Add(typeof(TNext));
+
+				return new PrototypeBuilder<TNext>
+				{
+					Settings = Settings
+				};
+			}
+			public PrototypeBuilder<T> DisableNew()
+			{
+				Settings.AllowNew[typeof(T)] = false;
+				return this;
+			}
+			public PrototypeBuilder<T> EnableNew(Action<T> afterNew)
+			{
+				Settings.AllowNew[typeof(T)] = true;
+				Settings.NewEvents[typeof(T)] = afterNew;
+				return this;
+			}
+			public PrototypeBuilder<T> DisableDelete()
+			{
+				Settings.AllowDelete[typeof(T)] = false;
+				return this;
+			}
+			public PrototypeBuilder<T> EnableDelete(Action<T> afterDelete)
+			{
+				Settings.AllowDelete[typeof(T)] = true;
+				Settings.DeleteEvents[typeof(T)] = afterDelete;
+				return this;
+			}
+			public PrototypeBuilder<T> OnValueChanged(Action<T> afterValueChanged)
+			{
+				Settings.ChangedEvents[typeof(T)] = afterValueChanged;
+				return this;
+			}
 		}
 	}
 }
