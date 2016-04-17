@@ -165,6 +165,22 @@ namespace JustObjectsPrototype.UI
 						   return;
 					   }
 
+					   var objectTypesToRefresh = from parameterInstance in parameterInstances
+												  let parameterType = parameterInstance.GetType()
+												  where parameterType.IsGenericType
+												  where parameterType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
+														||
+														parameterType.GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IEnumerable))
+												  select parameterType.GetGenericArguments().FirstOrDefault();
+					   var objectTypeToRefresh = objectTypesToRefresh.Intersect(new[] { SelectedType }).FirstOrDefault();
+					   if (objectTypeToRefresh != null)
+					   {
+						   foreach (var objectToRefresh in _Objects.OfType(objectTypeToRefresh))
+						   {
+							   objectToRefresh.RaisePropertyChanged(string.Empty);
+						   }
+					   }
+
 					   if (result != null)
 					   {
 						   var resultType = result.GetType();

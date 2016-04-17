@@ -23,6 +23,8 @@ namespace JustObjectsPrototype.Sample
 						new Kunde { Vorname = "Tester2", Nachname ="Test2"},
 					}
 				},
+				new Kunde { Vorname = "Max", Nachname = "Musterman" },
+				new Kunde { Vorname = "King", Nachname = "Kong" },
 				new Rechnung { Betrag = 20.00m },
 				new Rechnung {
 					Betrag = 150.00m,
@@ -50,7 +52,7 @@ namespace JustObjectsPrototype.Sample
 								.EnableDelete(deleted => { MessageBox.Show("Akte gelöscht: " + deleted.Name); })
 								.OnValueChanged(changed => { MessageBox.Show("Akte geändert: " + changed.Name); })
 							.ViewOf<Kunde>()
-								.DisableNew()
+								//.DisableNew()
 								.DisableDelete()
 								.OnValueChanged(changed => { changed.Geändert = true; })
 							.With(objects);
@@ -58,7 +60,6 @@ namespace JustObjectsPrototype.Sample
 
 			/* TODOs:
 			*
-			* prototype.Refresh(); //alle instanzen aktualisieren
 			* Buttonklicks im ribbon führen noch lostfocus aus.
 			* 
 			*/
@@ -136,9 +137,12 @@ namespace JustObjectsPrototype.Sample
 			return (Vorname + " " + Nachname).Trim();
 		}
 
-		public void Ungeändert()
+		public static void Alle_Ungeändert(ObservableCollection<Kunde> kunden)
 		{
-			Geändert = false;
+			foreach (var kunde in kunden)
+			{
+				kunde.Geändert = false;
+			}
 		}
 
 		public List<Kunde> Neuer_Freund()
@@ -147,6 +151,11 @@ namespace JustObjectsPrototype.Sample
 			Freunde.Add(kunde);
 
 			return new List<Kunde> { kunde };
+		}
+
+		public void Neuer_Freund(Kunde freund)
+		{
+			Freunde.Add(freund);
 		}
 
 		public Kunde Clonen()
