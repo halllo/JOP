@@ -102,7 +102,7 @@ namespace JustObjectsPrototype
 			public PrototypeBuilder<T> EnableNew(Action<T> afterNew)
 			{
 				Settings.AllowNew[typeof(T)] = true;
-				Settings.NewEvents[typeof(T)] = afterNew;
+				Settings.NewEvents[typeof(T)] = new Action<object>(o => afterNew((T)o));
 				return this;
 			}
 			public PrototypeBuilder<T> DisableDelete()
@@ -113,12 +113,12 @@ namespace JustObjectsPrototype
 			public PrototypeBuilder<T> EnableDelete(Action<T> afterDelete)
 			{
 				Settings.AllowDelete[typeof(T)] = true;
-				Settings.DeleteEvents[typeof(T)] = afterDelete;
+				Settings.DeleteEvents[typeof(T)] = new Action<object>(o => afterDelete((T)o));
 				return this;
 			}
 			public PrototypeBuilder<T> OnValueChanged(Action<T> afterValueChanged)
 			{
-				Settings.ChangedEvents[typeof(T)] = afterValueChanged;
+				Settings.ChangedEvents[typeof(T)] = new Action<object>(o => afterValueChanged((T)o));
 				return this;
 			}
 		}

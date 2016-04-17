@@ -19,6 +19,8 @@ namespace JustObjectsPrototype.UI
 		public MainWindowModel(ICollection<object> objects, Settings settings)
 		{
 			_Objects = new Objects(objects);
+			_Objects.Added += _Objects_Added;
+			_Objects.Removed += _Objects_Removed;
 			_Settings = settings;
 
 			Columns = new ObservableCollection<DataGridColumn>();
@@ -52,6 +54,37 @@ namespace JustObjectsPrototype.UI
 				canExecute: () => SelectedType != null && SelectedObject != null && _Settings.IsAllowDelete(SelectedType));
 		}
 
+		private void _Objects_Added(object obj)
+		{
+			var type = obj.GetType();
+			if (_Settings.NewEvents.ContainsKey(type))
+			{
+				var newHandler = _Settings.NewEvents[type];
+				try
+				{
+					(newHandler as Action<object>).Invoke(obj);
+				}
+				catch (Exception)
+				{
+				}
+			}
+		}
+
+		private void _Objects_Removed(object obj)
+		{
+			var type = obj.GetType();
+			if (_Settings.DeleteEvents.ContainsKey(type))
+			{
+				var deleteHandler = _Settings.DeleteEvents[type];
+				try
+				{
+					(deleteHandler as Action<object>).Invoke(obj);
+				}
+				catch (Exception)
+				{
+				}
+			}
+		}
 
 		public ObservableCollection<Type> Types { get; set; }
 		Type selectedType;

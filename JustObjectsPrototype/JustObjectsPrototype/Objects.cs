@@ -36,6 +36,9 @@ namespace JustObjectsPrototype
 			_Types = new ObservableCollection<Type>(typesAndObjects.Keys);
 		}
 
+		public event Action<object> Added;
+		public event Action<object> Removed;
+
 		public ObservableCollection<Type> Types
 		{
 			get { return _Types; }
@@ -136,13 +139,15 @@ namespace JustObjectsPrototype
 			{
 				foreach (var newItem in e.NewItems.Cast<ObjectProxy>())
 				{
-					if (_ObjectToProxy.ContainsKey(newItem.ProxiedObject) == false)
+					var proxiedObject = newItem.ProxiedObject;
+					if (_ObjectToProxy.ContainsKey(proxiedObject) == false)
 					{
-						_ObjectToProxy.Add(newItem.ProxiedObject, newItem);
+						_ObjectToProxy.Add(proxiedObject, newItem);
 					}
-					if (_Objects.Contains(newItem.ProxiedObject) == false)
+					if (_Objects.Contains(proxiedObject) == false)
 					{
-						_Objects.Add(newItem.ProxiedObject);
+						_Objects.Add(proxiedObject);
+						if (Added != null) Added(proxiedObject);
 					}
 				}
 			}
@@ -150,13 +155,15 @@ namespace JustObjectsPrototype
 			{
 				foreach (var oldItem in e.OldItems.Cast<ObjectProxy>())
 				{
-					if (_ObjectToProxy.ContainsKey(oldItem.ProxiedObject) == true)
+					var proxiedObject = oldItem.ProxiedObject;
+					if (_ObjectToProxy.ContainsKey(proxiedObject) == true)
 					{
-						_ObjectToProxy.Remove(oldItem.ProxiedObject);
+						_ObjectToProxy.Remove(proxiedObject);
 					}
-					if (_Objects.Contains(oldItem.ProxiedObject) == true)
+					if (_Objects.Contains(proxiedObject) == true)
 					{
-						_Objects.Remove(oldItem.ProxiedObject);
+						_Objects.Remove(proxiedObject);
+						if (Removed != null) Removed(proxiedObject);
 					}
 				}
 			}
@@ -171,6 +178,7 @@ namespace JustObjectsPrototype
 				foreach (var o in _Objects.Where(o => o.GetType() == type).ToList())
 				{
 					_Objects.Remove(o);
+					if (Removed != null) Removed(o);
 				}
 			}
 		}
