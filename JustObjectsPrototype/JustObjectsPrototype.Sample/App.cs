@@ -72,6 +72,7 @@ namespace JustObjectsPrototype.Sample
 		public Akte()
 		{
 		}
+		public int ID { get; set; }
 		public string Name { get; set; }
 		Kunde mandant = new Kunde { Vorname = "Hans", Nachname = "Müller" };
 		public Kunde Mandant { get { return mandant; } }

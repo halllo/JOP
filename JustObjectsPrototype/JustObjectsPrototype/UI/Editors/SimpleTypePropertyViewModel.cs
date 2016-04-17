@@ -30,7 +30,12 @@ namespace JustObjectsPrototype.UI.Editors
 
 		public bool CanWrite
 		{
-			get { return Property.CanWrite && Property.SetMethod.IsPublic; }
+			get
+			{
+				return Property.CanWrite
+					&& Property.SetMethod.IsPublic
+					&& Property.Name != "ID" && Property.Name != "Id";
+			}
 		}
 
 		public string Label { get { return ObjectDisplay.Nicely(Property); } }
