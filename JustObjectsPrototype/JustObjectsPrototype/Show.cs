@@ -26,6 +26,16 @@ namespace JustObjectsPrototype
 				}
 			};
 		}
+		public static Prototype EmptyViewOf<T>()
+		{
+			return new PrototypeBuilder<T>
+			{
+				Settings = new Settings
+				{
+					DisplayedTypes = new List<Type> { typeof(T) }
+				}
+			}.With(new List<object>());
+		}
 
 
 		public class PrototypeBuilder
