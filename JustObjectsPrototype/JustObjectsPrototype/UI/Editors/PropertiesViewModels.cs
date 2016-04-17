@@ -7,7 +7,7 @@ namespace JustObjectsPrototype.UI.Editors
 {
 	public static class PropertiesViewModels
 	{
-		public static List<IPropertyViewModel> Of(Type type, Objects objects, ObjectProxy selectedObject, Action<object> objectChangedCallback)
+		public static List<IPropertyViewModel> Of(Type type, Objects objects, ObjectProxy selectedObject, Action<ObjectChangedEventArgs> objectChangedCallback)
 		{
 			var properties = type
 				.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance)

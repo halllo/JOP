@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
 
 namespace JustObjectsPrototype.Sample
@@ -34,34 +33,32 @@ namespace JustObjectsPrototype.Sample
 			};
 
 
+			/*
 			var akten = objects.OfType<Akte>().ToList();
 			var kunden = objects.OfType<Kunde>().ToList();
-			//Show.With(akten, kunden);
-			//Show.With(objects);
-			//Show
-			//	.ViewOf<Akte>().DisableNew().DisableDelete()
-			//	.With(objects);
 
-			//Show.EmptyViewOf<Rechnung>();
-
-			var prototype = Show
-				.ViewOf<Akte>()
-					.EnableNew(newed => { MessageBox.Show("neue Akte: " + newed.Name); })
-					.EnableDelete(deleted => { MessageBox.Show("Akte gelöscht: " + deleted.Name); })
-					.OnValueChanged(changed => { MessageBox.Show("Akte geändert: " + changed.Name); })
-				.ViewOf<Kunde>()
-					.DisableNew()
-					.DisableDelete()
-					.OnValueChanged(changed => { MessageBox.Show("Kunde geändert: " + changed); })
+			Show.With(akten, kunden);
+			Show.With(objects);
+			Show.For<Akte>().DisableNew().DisableDelete()
+				.For<Kunde>().DisableNew().DisableDelete()
 				.With(objects);
+			Show.EmptyViewOf<Rechnung>();
+			*/
+
+			var prototype = Show.ViewOf<Akte>()
+								.EnableNew(newed => { newed.Name = "<new>"; MessageBox.Show("neue Akte: " + newed.Name); })
+								.EnableDelete(deleted => { MessageBox.Show("Akte gelöscht: " + deleted.Name); })
+								.OnValueChanged(changed => { MessageBox.Show("Akte geändert: " + changed.Name); })
+							.ViewOf<Kunde>()
+								.DisableNew()
+								.DisableDelete()
+								.OnValueChanged(changed => { changed.Geändert = true; })
+							.With(objects);
 
 
 			/* TODOs:
 			*
-			* changed events raisen
-			* autorefresh nach events
-			* prototype.Refresh();
-			* 
+			* prototype.Refresh(); //alle instanzen aktualisieren
 			* Buttonklicks im ribbon führen noch lostfocus aus.
 			* 
 			*/
@@ -128,6 +125,7 @@ namespace JustObjectsPrototype.Sample
 
 	public class Kunde
 	{
+		public bool Geändert { get; set; }
 		public string Vorname { get; set; }
 		public string Nachname { get; set; }
 		public Kunde Vertreter { get; set; }
@@ -136,6 +134,11 @@ namespace JustObjectsPrototype.Sample
 		public override string ToString()
 		{
 			return (Vorname + " " + Nachname).Trim();
+		}
+
+		public void Ungeändert()
+		{
+			Geändert = false;
 		}
 
 		public List<Kunde> Neuer_Freund()

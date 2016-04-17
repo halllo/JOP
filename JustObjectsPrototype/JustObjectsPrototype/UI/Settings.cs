@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JustObjectsPrototype.UI.Editors;
+using System;
 using System.Collections.Generic;
 
 namespace JustObjectsPrototype.UI
@@ -14,7 +15,7 @@ namespace JustObjectsPrototype.UI
 
 			NewEvents = new Dictionary<Type, object>();
 			DeleteEvents = new Dictionary<Type, object>();
-			ChangeEvents = new Dictionary<Type, object>();
+			ChangeEvents = new Dictionary<Type, Action<ObjectChangedEventArgs>>();
 		}
 
 		public List<Type> DisplayedTypes { get; set; }
@@ -46,10 +47,20 @@ namespace JustObjectsPrototype.UI
 			InvokeEventsIfExist(DeleteEvents, obj);
 		}
 
-		public Dictionary<Type, object> ChangeEvents { get; set; }
-		internal void InvokeChangeEvents(object obj)
+		public Dictionary<Type, Action<ObjectChangedEventArgs>> ChangeEvents { get; set; }
+		internal void InvokeChangeEvents(ObjectChangedEventArgs obj)
 		{
-			InvokeEventsIfExist(ChangeEvents, obj);
+			var type = obj.Object.GetType();
+			if (ChangeEvents.ContainsKey(type))
+			{
+				try
+				{
+					ChangeEvents[type].Invoke(obj);
+				}
+				catch (Exception)
+				{
+				}
+			}
 		}
 
 		private static void InvokeEventsIfExist(Dictionary<Type, object> events, object o)

@@ -55,8 +55,6 @@ namespace JustObjectsPrototype.UI
 				canExecute: () => SelectedType != null && SelectedObject != null && _Settings.IsAllowDelete(SelectedType));
 		}
 
-
-
 		public ObservableCollection<Type> Types { get; set; }
 		Type selectedType;
 		public Type SelectedType

@@ -26,7 +26,7 @@ namespace JustObjectsPrototype.UI.Editors
 			}
 		}
 		public PropertyInfo Property { private get; set; }
-		public Action<object> ObjectChanged { private get; set; }
+		public Action<ObjectChangedEventArgs> ObjectChanged { private get; set; }
 
 		public bool CanWrite
 		{
@@ -54,8 +54,8 @@ namespace JustObjectsPrototype.UI.Editors
 				{
 					var convertedValue = Convert.ChangeType(value, Property.PropertyType);
 					Property.SetValue(Instance.ProxiedObject, convertedValue);
+					if (ObjectChanged != null) ObjectChanged(new ObjectChangedEventArgs { Object = Instance.ProxiedObject, PropertyName = Property.Name });
 					Instance.RaisePropertyChanged(string.Empty);
-					if (ObjectChanged != null) ObjectChanged(Instance.ProxiedObject);
 				}
 				catch (Exception e)
 				{
