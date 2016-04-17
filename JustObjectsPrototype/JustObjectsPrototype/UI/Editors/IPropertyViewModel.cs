@@ -8,5 +8,6 @@ namespace JustObjectsPrototype.UI.Editors
 		object Value { get; }
 		Type ValueType { get; }
 		void Refresh();
+		Action<object> ObjectChanged { set; }
 	}
 }

@@ -8,12 +8,13 @@ namespace JustObjectsPrototype.UI
 		public Settings()
 		{
 			DisplayedTypes = new List<Type>();
+
 			AllowNew = new Dictionary<Type, bool>();
 			AllowDelete = new Dictionary<Type, bool>();
 
 			NewEvents = new Dictionary<Type, object>();
 			DeleteEvents = new Dictionary<Type, object>();
-			ChangedEvents = new Dictionary<Type, object>();
+			ChangeEvents = new Dictionary<Type, object>();
 		}
 
 		public List<Type> DisplayedTypes { get; set; }
@@ -32,8 +33,38 @@ namespace JustObjectsPrototype.UI
 				|| (AllowDelete.ContainsKey(type) && AllowDelete[type]);
 		}
 
+
 		public Dictionary<Type, object> NewEvents { get; set; }
+		internal void InvokeNewEvents(object obj)
+		{
+			InvokeEventsIfExist(NewEvents, obj);
+		}
+
 		public Dictionary<Type, object> DeleteEvents { get; set; }
-		public Dictionary<Type, object> ChangedEvents { get; set; }
+		internal void InvokeDeleteEvents(object obj)
+		{
+			InvokeEventsIfExist(DeleteEvents, obj);
+		}
+
+		public Dictionary<Type, object> ChangeEvents { get; set; }
+		internal void InvokeChangeEvents(object obj)
+		{
+			InvokeEventsIfExist(ChangeEvents, obj);
+		}
+
+		private static void InvokeEventsIfExist(Dictionary<Type, object> events, object o)
+		{
+			var type = o.GetType();
+			if (events.ContainsKey(type))
+			{
+				try
+				{
+					(events[type] as Action<object>).Invoke(o);
+				}
+				catch (Exception)
+				{
+				}
+			}
+		}
 	}
 }

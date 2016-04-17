@@ -118,7 +118,7 @@ namespace JustObjectsPrototype
 			}
 			public PrototypeBuilder<T> OnValueChanged(Action<T> afterValueChanged)
 			{
-				Settings.ChangedEvents[typeof(T)] = new Action<object>(o => afterValueChanged((T)o));
+				Settings.ChangeEvents[typeof(T)] = new Action<object>(o => afterValueChanged((T)o));
 				return this;
 			}
 		}

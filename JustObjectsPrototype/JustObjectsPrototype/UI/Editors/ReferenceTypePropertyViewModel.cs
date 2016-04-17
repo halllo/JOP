@@ -27,7 +27,7 @@ namespace JustObjectsPrototype.UI.Editors
 		}
 		public PropertyInfo Property { private get; set; }
 		public IEnumerable<object> Objects { private get; set; }
-		public Action ChangeCallback { private get; set; }
+		public Action<object> ObjectChanged { private get; set; }
 
 		public bool CanWrite
 		{
@@ -58,6 +58,7 @@ namespace JustObjectsPrototype.UI.Editors
 
 				Property.SetValue(Instance.ProxiedObject, value);
 				Instance.RaisePropertyChanged(Property.Name);
+				if (ObjectChanged != null) ObjectChanged(Instance.ProxiedObject);
 			}
 		}
 
