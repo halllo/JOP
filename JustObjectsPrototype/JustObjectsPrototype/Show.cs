@@ -39,6 +39,8 @@ namespace JustObjectsPrototype
 
 			public Prototype With(params IEnumerable<object>[] objects)
 			{
+				if (objects.Length == 0 || objects.Any(o => o == null)) throw new ArgumentNullException();
+
 				var collection = new ObservableCollection<object>(objects.Aggregate((o1, o2) => o1.Concat(o2)));
 				return With(collection); ;
 			}

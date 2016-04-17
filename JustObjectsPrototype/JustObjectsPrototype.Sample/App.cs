@@ -42,6 +42,7 @@ namespace JustObjectsPrototype.Sample
 			//	.ViewOf<Akte>().DisableNew().DisableDelete()
 			//	.With(objects);
 
+			Show.ViewOf<Rechnung>().With();
 
 			var prototype = Show
 				.ViewOf<Akte>()
