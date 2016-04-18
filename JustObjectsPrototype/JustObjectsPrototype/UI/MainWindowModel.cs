@@ -165,21 +165,26 @@ namespace JustObjectsPrototype.UI
 						   return;
 					   }
 
-					   var objectTypesToRefresh = from parameterInstance in parameterInstances
-												  let parameterType = parameterInstance.GetType()
-												  where parameterType.IsGenericType
-												  where parameterType.GetGenericTypeDefinition() == typeof(IEnumerable<>)
-														||
-														parameterType.GetGenericTypeDefinition().GetInterfaces().Contains(typeof(IEnumerable))
-												  select parameterType.GetGenericArguments().FirstOrDefault();
-					   var objectTypeToRefresh = objectTypesToRefresh.Intersect(new[] { SelectedType }).FirstOrDefault();
-					   if (objectTypeToRefresh != null)
+
+					   var objectsToRefreshCandidates = parameterInstances.SelectMany(i =>
 					   {
-						   foreach (var objectToRefresh in _Objects.OfType(objectTypeToRefresh))
+						   if (i is IEnumerable)
 						   {
-							   objectToRefresh.RaisePropertyChanged(string.Empty);
+							   return ((IEnumerable)i).OfType<object>();
 						   }
+						   else
+						   {
+							   return new[] { i }.OfType<object>();
+						   }
+					   });
+					   var ofTypeMethod = typeof(Enumerable).GetMethod("OfType").MakeGenericMethod(SelectedType);
+					   var objectsToRefresh = (IEnumerable<object>)ofTypeMethod.Invoke(null, new[] { objectsToRefreshCandidates });
+					   foreach (var objectToRefresh in objectsToRefresh)
+					   {
+						   var proxy = _Objects.GetProxy(objectToRefresh);
+						   proxy.RaisePropertyChanged(string.Empty);
 					   }
+
 
 					   if (result != null)
 					   {

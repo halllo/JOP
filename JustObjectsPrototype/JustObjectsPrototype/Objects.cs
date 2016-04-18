@@ -62,6 +62,11 @@ namespace JustObjectsPrototype
 			return _ObjectsByTypes[type];
 		}
 
+		public ObjectProxy GetProxy(object o)
+		{
+			return _ObjectToProxy[o];
+		}
+
 		public object OfType_OneWayToSourceChangePropagation(Type type)
 		{
 			return typeof(Objects)

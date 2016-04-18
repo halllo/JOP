@@ -57,7 +57,7 @@ namespace JustObjectsPrototype.UI
 				{
 					ChangeEvents[type].Invoke(obj);
 				}
-				catch (Exception)
+				catch (Exception e)
 				{
 				}
 			}
@@ -72,7 +72,7 @@ namespace JustObjectsPrototype.UI
 				{
 					(events[type] as Action<object>).Invoke(o);
 				}
-				catch (Exception)
+				catch (Exception e)
 				{
 				}
 			}
