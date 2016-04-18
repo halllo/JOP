@@ -3,7 +3,6 @@ JOP - JustObjectsPrototype
 Create only your domain objects and get a prototype shell for free.
 
 [![Build status](https://ci.appveyor.com/api/projects/status/ctsxu7rw3vx537op?svg=true)](https://ci.appveyor.com/project/halllo/jop)
-[![NuGet downloads](https://img.shields.io/nuget/dt/JOP.svg)](https://www.nuget.org/packages/JOP)
 [![Version](https://img.shields.io/nuget/v/JOP.svg)](https://www.nuget.org/packages/JOP)
 
 How To Use
