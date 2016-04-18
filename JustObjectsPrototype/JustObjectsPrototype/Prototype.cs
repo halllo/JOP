@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 
 namespace JustObjectsPrototype
 {
@@ -8,6 +8,6 @@ namespace JustObjectsPrototype
 		{
 		}
 
-		public ObservableCollection<object> Repository { get; internal set; }
+		public ICollection<object> Repository { get; internal set; }
 	}
 }

@@ -123,7 +123,7 @@ namespace JustObjectsPrototype
 
 				return new Prototype
 				{
-					Repository = objects is ObservableCollection<object> ? objects as ObservableCollection<object> : new ObservableCollection<object>(objects)
+					Repository = objects
 				};
 			}
 		}
