@@ -21,8 +21,6 @@ namespace JustObjectsPrototype.UI
 			_Settings = settings;
 
 			_Objects = new Objects(objects);
-			_Objects.Added += _Settings.InvokeNewEvents;
-			_Objects.Removed += _Settings.InvokeDeleteEvents;
 
 			Columns = new ObservableCollection<DataGridColumn>();
 			Types = _Settings.DisplayedTypes.Any() ? new ObservableCollection<Type>(_Settings.DisplayedTypes) : _Objects.Types;
@@ -37,6 +35,7 @@ namespace JustObjectsPrototype.UI
 						var newObject = Activator.CreateInstance(SelectedType);
 						var newProxy = new ObjectProxy(newObject);
 						Objects.Add(newProxy);
+						_Settings.InvokeNewEvents(newObject);
 						SelectedObject = newProxy;
 						Changed(() => SelectedObject);
 					}
@@ -50,7 +49,11 @@ namespace JustObjectsPrototype.UI
 				execute: () =>
 				{
 					if (MessageBoxResult.Yes == MessageBox.Show("Are you sure?", "Delete object", MessageBoxButton.YesNo))
-						Objects.Remove(SelectedObject);
+					{
+						var deletedObjet = SelectedObject;
+						Objects.Remove(deletedObjet);
+						_Settings.InvokeDeleteEvents(deletedObjet.ProxiedObject);
+					}
 				},
 				canExecute: () => SelectedType != null && SelectedObject != null && _Settings.IsAllowDelete(SelectedType));
 		}

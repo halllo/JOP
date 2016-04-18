@@ -48,7 +48,7 @@ namespace JustObjectsPrototype.Sample
 			*/
 
 			var prototype = Show.ViewOf<Akte>()
-								.EnableNew(newed => { MessageBox.Show("neue Akte: " + newed.Name); })
+								.EnableNew(newed => { newed.Name = "new"; MessageBox.Show("neue Akte: " + newed.Name); })
 								.EnableDelete(deleted => { MessageBox.Show("Akte gelöscht: " + deleted.Name); })
 								.OnValueChanged(changed => { MessageBox.Show("Akte geändert: " + changed.Name); })
 							.ViewOf<Kunde>()
