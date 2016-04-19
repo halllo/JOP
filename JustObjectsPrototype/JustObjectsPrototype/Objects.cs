@@ -64,7 +64,7 @@ namespace JustObjectsPrototype
 
 		public ObjectProxy GetProxy(object o)
 		{
-			return _ObjectToProxy[o];
+			return _ObjectToProxy.ContainsKey(o) ? _ObjectToProxy[o] : null;
 		}
 
 		public object OfType_OneWayToSourceChangePropagation(Type type)

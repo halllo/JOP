@@ -185,7 +185,7 @@ namespace JustObjectsPrototype.UI
 					   foreach (var objectToRefresh in objectsToRefresh)
 					   {
 						   var proxy = _Objects.GetProxy(objectToRefresh);
-						   proxy.RaisePropertyChanged(string.Empty);
+						   if (proxy != null) proxy.RaisePropertyChanged(string.Empty);
 					   }
 
 
