@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 
 namespace JustObjectsPrototype.Sample
@@ -36,26 +37,32 @@ namespace JustObjectsPrototype.Sample
 
 
 			/*
+			*/
 			var akten = objects.OfType<Akte>().ToList();
 			var kunden = objects.OfType<Kunde>().ToList();
+			Prototype.Show(akten, kunden);
+			Prototype.Show(with: objects);
+			Prototype.Show();
+			Prototype.Show(With.ViewOf<Akte>());
+			Prototype.Show(With.ViewOf<Akte>().AndObjects());
+			Prototype.Show(With.Objects(akten));
+			Prototype.Show(With
+				.SettingsFor<Akte>().DisableNew().DisableDelete()
+				.AndSettingsFor<Kunde>().DisableNew().DisableDelete()
+				.AndObjects(objects)
+			);
+			Prototype.Show(With.Objects(akten).AndSettingsFor<Akte>().DisableDelete().DisableNew());
+			Prototype.Show(With.Objects(objects)
+				.AndViewOf<Akte>()
+					.EnableNew(newed => { newed.Name = "new"; MessageBox.Show("neue Akte: " + newed.Name); })
+					.EnableDelete(deleted => { MessageBox.Show("Akte gelöscht: " + deleted.Name); })
+					.OnValueChanged(changed => { MessageBox.Show("Akte geändert: " + changed.Name); })
+				.AndViewOf<Kunde>()
+					.EnableNew()
+					.DisableDelete()
+					.OnValueChanged(changed => { changed.Geändert = true; })
+			);
 
-			Show.With(akten, kunden);
-			Show.With(objects);
-			Show.For<Akte>().DisableNew().DisableDelete()
-				.For<Kunde>().DisableNew().DisableDelete()
-				.With(objects);
-			Show.EmptyViewOf<Rechnung>();
-			*/
-
-			var prototype = Show.ViewOf<Akte>()
-								.EnableNew(newed => { newed.Name = "new"; MessageBox.Show("neue Akte: " + newed.Name); })
-								.EnableDelete(deleted => { MessageBox.Show("Akte gelöscht: " + deleted.Name); })
-								.OnValueChanged(changed => { MessageBox.Show("Akte geändert: " + changed.Name); })
-							.ViewOf<Kunde>()
-								//.DisableNew()
-								.DisableDelete()
-								.OnValueChanged(changed => { changed.Geändert = true; })
-							.With(objects);
 
 
 			/* TODOs:

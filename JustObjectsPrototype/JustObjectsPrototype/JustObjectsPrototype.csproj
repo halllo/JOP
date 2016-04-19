@@ -72,7 +72,6 @@
     <Compile Include="UI\MethodInvocationDialogModel.cs" />
     <Compile Include="UI\Settings.cs" />
     <Compile Include="UI\ViewModel.cs" />
-    <Compile Include="Show.cs" />
     <Page Include="UI\Editors\PropertiesViews.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
