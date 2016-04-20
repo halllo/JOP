@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 
 namespace JustObjectsPrototype.UI
 {
@@ -136,6 +137,8 @@ namespace JustObjectsPrototype.UI
 				   where m.Name != "ToString"
 				   select Tuple.Create(ObjectDisplay.Nicely(m), new Command(() =>
 				   {
+					   UpdateUserInput();
+
 					   var parameters = m.GetParameters();
 					   var runtimeTypeForParameters = TypeCreator.New(m.Name, parameters.ToDictionary(p => p.Name, p => p.ParameterType));
 					   var runtimeTypeForParametersInstance = Activator.CreateInstance(runtimeTypeForParameters);
@@ -234,6 +237,16 @@ namespace JustObjectsPrototype.UI
 		{
 			object[] attrs = type.Assembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
 			return attrs.OfType<AssemblyCompanyAttribute>().Any(attr => attr.Company == "Microsoft Corporation");
+		}
+
+		static void UpdateUserInput()
+		{
+			var focusedTextBox = Keyboard.FocusedElement as TextBox;
+			if (focusedTextBox != null)
+			{
+				var binding = focusedTextBox.GetBindingExpression(TextBox.TextProperty);
+				binding.UpdateSource();
+			}
 		}
 
 		public List<IPropertyViewModel> Properties { get; set; }

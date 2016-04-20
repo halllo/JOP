@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Windows;
 
 namespace JustObjectsPrototype.Sample
@@ -35,9 +34,7 @@ namespace JustObjectsPrototype.Sample
 				},
 			};
 
-
 			/*
-			*/
 			var akten = objects.OfType<Akte>().ToList();
 			var kunden = objects.OfType<Kunde>().ToList();
 			Show.Prototype(akten, kunden);
@@ -52,6 +49,7 @@ namespace JustObjectsPrototype.Sample
 				.AndObjects(objects)
 			);
 			Show.Prototype(With.These(akten).AndSettingsFor<Akte>().DisableDelete().DisableNew());
+			*/
 			Show.Prototype(With.These(objects)
 				.AndViewOf<Akte>()
 					.EnableNew(newed => { newed.Name = "new"; MessageBox.Show("neue Akte: " + newed.Name); })
@@ -62,14 +60,6 @@ namespace JustObjectsPrototype.Sample
 					.DisableDelete()
 					.OnValueChanged(changed => { changed.Geändert = true; })
 			);
-
-
-
-			/* TODOs:
-			*
-			* Buttonklicks im ribbon führen noch lostfocus aus.
-			* 
-			*/
 		}
 	}
 
@@ -95,6 +85,11 @@ namespace JustObjectsPrototype.Sample
 		{
 			MessageBox.Show(briefe.Count + " Briefe?");
 			briefe.Add(new Brief(autor) { Inhalt = "Hallo Welt" });
+		}
+
+		public void Info()
+		{
+			MessageBox.Show(Name);
 		}
 
 		public static void Alle_Löschen(ObservableCollection<Akte> akten)
