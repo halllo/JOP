@@ -49,7 +49,6 @@ namespace JustObjectsPrototype.Sample
 				.AndObjects(objects)
 			);
 			Show.Prototype(With.These(akten).AndSettingsFor<Akte>().DisableDelete().DisableNew());
-			*/
 			Show.Prototype(With.These(objects)
 				.AndViewOf<Akte>()
 					.EnableNew(newed => { newed.Name = "new"; MessageBox.Show("neue Akte: " + newed.Name); })
@@ -60,6 +59,46 @@ namespace JustObjectsPrototype.Sample
 					.DisableDelete()
 					.OnValueChanged(changed => { changed.Geändert = true; })
 			);
+			*/
+
+
+
+			var customers = new List<Customer>
+			{
+				new Customer { Name = "Max Musterman" }
+			};
+
+			Show.Prototype(With.These(customers));
+		}
+	}
+
+
+
+	public class Invoice
+	{
+		public Customer Receiver { get; set; }
+		public decimal Amount { get; set; }
+
+		public void Increase()
+		{
+			Amount += 1;
+		}
+	}
+	public class Customer
+	{
+		public string Name { get; set; }
+		public override string ToString()
+		{
+			return Name;
+		}
+
+		public Invoice Bill(decimal amount)
+		{
+			return new Invoice
+			{
+				Receiver = this,
+				Amount = amount,
+			};
 		}
 	}
 

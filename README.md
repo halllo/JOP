@@ -7,7 +7,7 @@ Create only your domain objects and get a prototype shell for free.
 
 How To Use
 ----------
-Just create a new .NET 4.5 Console Application and add POCO classes for your prototype domain types, like in the example below.
+Just create a new .NET 4.5 Console Application and add POCO classes that implement your domain, like in the example below.
 ```csharp
 public class Invoice
 {
@@ -22,17 +22,35 @@ public class Invoice
 public class Customer
 {
    public string Name { get; set; }
+   public override string ToString()
+   {
+      return Name;
+   }
+
+   public Invoice Bill(decimal amount) 
+   {
+      return new Invoice 
+      {
+         Receiver = this,
+         Amount = amount,
+      };
+   }
 }
 ```
-Now that you modelled your prototype domain, "Install-Package JOP" and show the prototype UI.
+Now that you modelled your prototype domain, "Install-Package JOP" and show the prototype UI using a fluent and natural language like API.
 ```csharp
 [STAThreadAttribute()]
 public static void Main()
 {
-   JustObjectsPrototype.Show.With(new List<object> {}, new List<Type> { typeof(Invoice), typeof(Customer) });
+   var customers = new List<Customer> 
+   {
+      new Customer { Name = "Max Musterman" }
+   };
+
+   Show.Prototype(With.These(customers));
 }
 ```
-This gets you a UI like in the screenshot below, with no predefined objects and your two types. You can then create and delete instances of your types and invoke their methods.
+This gets you a UI like in the screenshot below, where you can then create and delete instances of your types and invoke their methods, to bill customers for example.
 ![Screenshot](https://raw.github.com/halllo/JOP/master/screenshot.png)
 
 Happy prototyping!
