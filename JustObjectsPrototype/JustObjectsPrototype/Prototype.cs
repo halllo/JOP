@@ -18,13 +18,29 @@ namespace JustObjectsPrototype
 
 		public static Prototype Show(params IEnumerable<object>[] with)
 		{
-			return Show(With.Objects(with));
+			return JustObjectsPrototype.Show.Prototype(With.Objects(with));
 		}
 		public static Prototype Show(ICollection<object> with)
 		{
-			return Show(With.Objects(with));
+			return JustObjectsPrototype.Show.Prototype(With.Objects(with));
 		}
 		public static Prototype Show(PrototypeBuilder with)
+		{
+			return JustObjectsPrototype.Show.Prototype(with);
+		}
+	}
+
+	public static class Show
+	{
+		public static Prototype Prototype(params IEnumerable<object>[] with)
+		{
+			return Prototype(With.Objects(with));
+		}
+		public static Prototype Prototype(ICollection<object> with)
+		{
+			return Prototype(With.Objects(with));
+		}
+		public static Prototype Prototype(PrototypeBuilder with)
 		{
 			var objects = with.Repository;
 			if (objects.Any(o => o == null)) throw new ArgumentNullException();
@@ -68,10 +84,22 @@ namespace JustObjectsPrototype
 			builder.AndObjects(objects);
 			return builder;
 		}
+		public static PrototypeBuilder These(params IEnumerable<object>[] objects)
+		{
+			var builder = new PrototypeBuilder();
+			builder.AndThese(objects);
+			return builder;
+		}
 		public static PrototypeBuilder Objects(ICollection<object> objects)
 		{
 			var builder = new PrototypeBuilder();
 			builder.AndObjects(objects);
+			return builder;
+		}
+		public static PrototypeBuilder These(ICollection<object> objects)
+		{
+			var builder = new PrototypeBuilder();
+			builder.AndThese(objects);
 			return builder;
 		}
 	}
@@ -108,7 +136,17 @@ namespace JustObjectsPrototype
 			Repository = new ObservableCollection<object>(objects.SelectMany(l => l));
 			return this;
 		}
+		public PrototypeBuilder AndThese(params IEnumerable<object>[] objects)
+		{
+			Repository = new ObservableCollection<object>(objects.SelectMany(l => l));
+			return this;
+		}
 		public PrototypeBuilder AndObjects(ICollection<object> objects)
+		{
+			Repository = objects;
+			return this;
+		}
+		public PrototypeBuilder AndThese(ICollection<object> objects)
 		{
 			Repository = objects;
 			return this;

@@ -40,19 +40,19 @@ namespace JustObjectsPrototype.Sample
 			*/
 			var akten = objects.OfType<Akte>().ToList();
 			var kunden = objects.OfType<Kunde>().ToList();
-			Prototype.Show(akten, kunden);
-			Prototype.Show(with: objects);
-			Prototype.Show();
-			Prototype.Show(With.ViewOf<Akte>());
-			Prototype.Show(With.ViewOf<Akte>().AndObjects());
-			Prototype.Show(With.Objects(akten));
-			Prototype.Show(With
+			Show.Prototype(akten, kunden);
+			Show.Prototype(with: objects);
+			Show.Prototype();
+			Show.Prototype(With.ViewOf<Akte>());
+			Show.Prototype(With.ViewOf<Akte>().AndObjects());
+			Show.Prototype(With.These(akten));
+			Show.Prototype(With
 				.SettingsFor<Akte>().DisableNew().DisableDelete()
 				.AndSettingsFor<Kunde>().DisableNew().DisableDelete()
 				.AndObjects(objects)
 			);
-			Prototype.Show(With.Objects(akten).AndSettingsFor<Akte>().DisableDelete().DisableNew());
-			Prototype.Show(With.Objects(objects)
+			Show.Prototype(With.These(akten).AndSettingsFor<Akte>().DisableDelete().DisableNew());
+			Show.Prototype(With.These(objects)
 				.AndViewOf<Akte>()
 					.EnableNew(newed => { newed.Name = "new"; MessageBox.Show("neue Akte: " + newed.Name); })
 					.EnableDelete(deleted => { MessageBox.Show("Akte gelöscht: " + deleted.Name); })
