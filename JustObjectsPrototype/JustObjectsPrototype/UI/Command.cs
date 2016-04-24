@@ -28,7 +28,10 @@ namespace JustObjectsPrototype.UI
 
 		public void RaiseCanExecuteChanged()
 		{
-			CanExecuteChanged(this, new EventArgs());
+			if (CanExecuteChanged != null)
+			{
+				CanExecuteChanged(this, new EventArgs());
+			}
 		}
 	}
 }

@@ -7,7 +7,7 @@ namespace JustObjectsPrototype.Sample
 {
 	public class App : Application
 	{
-		[STAThreadAttribute()]
+		[STAThread()]
 		public static void Main()
 		{
 			var objects = new ObservableCollection<object>
@@ -69,7 +69,11 @@ namespace JustObjectsPrototype.Sample
 				new Customer { Name = "Max Musterman" }
 			};
 
-			Show.Prototype(With.These(customers).AndWindow(w => w.Title = "Customer Manager"));
+			Show.Prototype(With.These(customers).AndWindow(w =>
+			{
+				w.Title = "Customer Manager";
+				w.ViewModel.SelectedType = w.ViewModel.Types[0];
+			}));
 		}
 	}
 

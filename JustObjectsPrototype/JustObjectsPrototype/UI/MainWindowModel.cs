@@ -27,10 +27,11 @@ namespace JustObjectsPrototype.UI
 			Types = _Settings.DisplayedTypes.Any() ? new ObservableCollection<Type>(_Settings.DisplayedTypes) : _Objects.Types;
 
 			Diagnose = new Command(
-				execute: () => MessageBox.Show("all objects: \n\n\t" + string.Join("\n\t", _Objects.All)));
+				execute: () => MessageBox.Show("all objects: \n\n\t" + string.Join("\n\t", _Objects.All.Take(100))));
 			New = new Command(
 				execute: () =>
 				{
+					UpdateUserInput();
 					try
 					{
 						var newObject = Activator.CreateInstance(SelectedType);
@@ -69,6 +70,8 @@ namespace JustObjectsPrototype.UI
 			}
 			set
 			{
+				InfoVisibility = Visibility.Collapsed;
+
 				selectedType = value;
 				Objects = _Objects.OfType(selectedType);
 
@@ -257,5 +260,16 @@ namespace JustObjectsPrototype.UI
 		public Command Delete { get; set; }
 
 		public Func<object, bool?> ShowMethodInvocationDialog { get; set; }
+
+		public Visibility InfoVisibility
+		{
+			get { return infoVisibility; }
+			set
+			{
+				infoVisibility = value;
+				Changed(() => InfoVisibility);
+			}
+		}
+		Visibility infoVisibility;
 	}
 }

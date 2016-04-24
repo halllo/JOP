@@ -7,5 +7,10 @@ namespace JustObjectsPrototype.UI
 		{
 			InitializeComponent();
 		}
+
+		public MainWindowModel ViewModel
+		{
+			get { return DataContext as MainWindowModel; }
+		}
 	}
 }
