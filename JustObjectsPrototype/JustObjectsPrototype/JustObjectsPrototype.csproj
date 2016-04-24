@@ -66,6 +66,9 @@
     <Compile Include="UI\Editors\SimpleTypeListPropertyViewModel.cs" />
     <Compile Include="UI\Editors\SimpleTypePropertyViewModel.cs" />
     <Compile Include="UI\Editors\ObjectDisplay.cs" />
+    <Compile Include="UI\Info.xaml.cs">
+      <DependentUpon>Info.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\MethodInvocationDialog.xaml.cs">
       <DependentUpon>MethodInvocationDialog.xaml</DependentUpon>
     </Compile>
@@ -73,6 +76,10 @@
     <Compile Include="UI\Settings.cs" />
     <Compile Include="UI\ViewModel.cs" />
     <Page Include="UI\Editors\PropertiesViews.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Info.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -123,6 +130,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="UI\Resources\computer1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\Resources\left.png" />
+    <Resource Include="UI\Resources\logo.png" />
+    <Resource Include="UI\Resources\top.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

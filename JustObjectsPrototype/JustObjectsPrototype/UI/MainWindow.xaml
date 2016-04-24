@@ -93,5 +93,8 @@
                 </ItemsControl.Resources>
             </ItemsControl>
         </ScrollViewer>
-    </Grid>
+
+		<local:Info Grid.Row="1" Grid.RowSpan="3" Grid.Column="2" Visibility="{Binding InfoVisibility}"/>
+
+	</Grid>
 </Window>
