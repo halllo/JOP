@@ -41,7 +41,8 @@ namespace JustObjectsPrototype.Sample
 			Show.Prototype(with: objects);
 			Show.Prototype();
 			Show.Prototype(With.ViewOf<Akte>());
-			Show.Prototype(With.ViewOf<Akte>().AndObjects());
+			Show.Prototype(With.Window(w => w.Title = "Akten").AndViewOf<Akte>());
+			Show.Prototype(With.ViewOf<Akte>().AndWindow(w => w.Title = "Akten").AndObjects());
 			Show.Prototype(With.These(akten));
 			Show.Prototype(With
 				.SettingsFor<Akte>().DisableNew().DisableDelete()
@@ -68,7 +69,7 @@ namespace JustObjectsPrototype.Sample
 				new Customer { Name = "Max Musterman" }
 			};
 
-			Show.Prototype(With.These(customers));
+			Show.Prototype(With.These(customers).AndWindow(w => w.Title = "Customer Manager"));
 		}
 	}
 

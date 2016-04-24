@@ -57,6 +57,10 @@ namespace JustObjectsPrototype
 			{
 				DataContext = windowModel
 			};
+			if (with.WindowSetup != null)
+			{
+				with.WindowSetup(window);
+			}
 			window.ShowDialog();
 
 			return new Prototype
@@ -90,6 +94,12 @@ namespace JustObjectsPrototype
 			builder.AndThese(objects);
 			return builder;
 		}
+		public static PrototypeBuilder Window(Action<MainWindow> windowSetup)
+		{
+			var builder = new PrototypeBuilder();
+			builder.AndWindow(windowSetup);
+			return builder;
+		}
 		public static PrototypeBuilder Objects(ICollection<object> objects)
 		{
 			var builder = new PrototypeBuilder();
@@ -112,6 +122,7 @@ namespace JustObjectsPrototype
 		}
 		internal Settings Settings { get; set; }
 		internal ICollection<object> Repository { get; set; }
+		internal Action<MainWindow> WindowSetup { get; set; }
 
 		public PrototypeBuilder<TNext> AndSettingsFor<TNext>()
 		{
@@ -119,6 +130,7 @@ namespace JustObjectsPrototype
 			{
 				Settings = Settings,
 				Repository = Repository,
+				WindowSetup = WindowSetup,
 			};
 		}
 		public PrototypeBuilder<TNext> AndViewOf<TNext>()
@@ -129,6 +141,7 @@ namespace JustObjectsPrototype
 			{
 				Settings = Settings,
 				Repository = Repository,
+				WindowSetup = WindowSetup,
 			};
 		}
 		public PrototypeBuilder AndObjects(params IEnumerable<object>[] objects)
@@ -149,6 +162,11 @@ namespace JustObjectsPrototype
 		public PrototypeBuilder AndThese(ICollection<object> objects)
 		{
 			Repository = objects;
+			return this;
+		}
+		public PrototypeBuilder AndWindow(Action<MainWindow> windowSetup)
+		{
+			WindowSetup = windowSetup;
 			return this;
 		}
 	}
