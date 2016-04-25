@@ -47,13 +47,13 @@
                 </Ribbon.HelpPaneContent>
                 <RibbonTab Header="Main">
                     <RibbonGroup Header="object">
-                        <RibbonButton Label="new" Command="{Binding New}" SmallImageSource="Resources/add182.png" LargeImageSource="Resources/add182.png"/>
-                        <RibbonButton Label="delete" Command="{Binding Delete}" SmallImageSource="Resources/cross108.png" LargeImageSource="Resources/cross108.png"/>
+                        <RibbonButton Label="new" Command="{Binding New}" SmallImageSource="Resources/add.png" LargeImageSource="Resources/add.png"/>
+                        <RibbonButton Label="delete" Command="{Binding Delete}" SmallImageSource="Resources/remove.png" LargeImageSource="Resources/remove.png"/>
                     </RibbonGroup>
                     <RibbonGroup Header="methods" ItemsSource="{Binding Functions}">
                         <RibbonGroup.ItemTemplate>
                             <DataTemplate>
-                                <RibbonButton Label="{Binding Item1}" Command="{Binding Item2}" LargeImageSource="Resources/computer1.png"/>
+                                <RibbonButton Label="{Binding Item1}" Command="{Binding Item2}" SmallImageSource="Resources/invoke.png" LargeImageSource="Resources/invoke.png"/>
                             </DataTemplate>
                         </RibbonGroup.ItemTemplate>
                     </RibbonGroup>

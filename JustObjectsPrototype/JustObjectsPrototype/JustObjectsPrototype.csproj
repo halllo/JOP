@@ -122,19 +122,17 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="UI\Resources\add182.png" />
-    <Resource Include="UI\Resources\cross108.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="UI\Resources\marketing8.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="UI\Resources\computer1.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="UI\Resources\left.png" />
     <Resource Include="UI\Resources\logo.png" />
     <Resource Include="UI\Resources\top.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="UI\Resources\add.png" />
+    <Resource Include="UI\Resources\invoke.png" />
+    <Resource Include="UI\Resources\remove.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
