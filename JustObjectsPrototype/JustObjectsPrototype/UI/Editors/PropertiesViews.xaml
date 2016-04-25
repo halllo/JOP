@@ -96,7 +96,7 @@
 				<Button Grid.Row="0" Grid.Column="1" BorderThickness="0" Background="Transparent"
 										Command="{Binding AddReference}">
 					<Button.Content>
-						<Image Source="../Resources/add182.png" Height="15"/>
+						<Image Source="../Resources/add.png" Height="15"/>
 					</Button.Content>
 				</Button>
 			</StackPanel>
@@ -112,7 +112,7 @@
 							<Button Grid.Column="1" BorderThickness="0" Background="Transparent"
 													Command="{Binding RemoveReference}">
 								<Button.Content>
-									<Image Source="../Resources/cross108.png" Height="15"/>
+									<Image Source="../Resources/remove.png" Height="15"/>
 								</Button.Content>
 							</Button>
 							<ComboBox ItemsSource="{Binding References}" SelectedItem="{Binding Value}">

@@ -69,7 +69,7 @@ namespace JustObjectsPrototype.Sample
 				new Customer { Name = "Max Musterman" }
 			};
 
-			Show.Prototype(With.These(customers).AndWindow(w =>
+			Show.Prototype(With.These(objects).AndWindow(w =>
 			{
 				w.Title = "Customer Manager";
 				//w.ViewModel.SelectedType = w.ViewModel.Types[0];
