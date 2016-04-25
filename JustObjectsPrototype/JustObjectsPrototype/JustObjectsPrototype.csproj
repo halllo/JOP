@@ -122,11 +122,11 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="UI\Resources\marketing8.png" />
+    <Resource Include="UI\Resources\logo.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="UI\Resources\left.png" />
-    <Resource Include="UI\Resources\logo.png" />
+    <Resource Include="UI\Resources\textlogo.png" />
     <Resource Include="UI\Resources\top.png" />
   </ItemGroup>
   <ItemGroup>

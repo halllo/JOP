@@ -24,6 +24,6 @@
 			</TextBlock>
 
 		</StackPanel>
-		<Image Source="Resources/logo.png" Stretch="None" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+		<Image Source="Resources/textlogo.png" Stretch="None" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
 	</Grid>
 </UserControl>

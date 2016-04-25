@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:local="clr-namespace:JustObjectsPrototype.UI"
 		xmlns:localEditors="clr-namespace:JustObjectsPrototype.UI.Editors"
-        Title="JOP - JustObjectsPrototype" Height="700" Width="1024" Icon="Resources/marketing8.png">
+        Title="JOP - JustObjectsPrototype" Height="700" Width="1024" Icon="Resources/logo.png">
     <Grid>
         <Grid.Resources>
             <Style TargetType="DataGrid" x:Key="GrayGridLines">
