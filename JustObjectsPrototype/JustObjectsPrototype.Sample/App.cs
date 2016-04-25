@@ -72,7 +72,7 @@ namespace JustObjectsPrototype.Sample
 			Show.Prototype(With.These(customers).AndWindow(w =>
 			{
 				w.Title = "Customer Manager";
-				w.ViewModel.SelectedType = w.ViewModel.Types[0];
+				//w.ViewModel.SelectedType = w.ViewModel.Types[0];
 			}));
 		}
 	}

@@ -46,7 +46,8 @@ namespace JustObjectsPrototype.UI.Editors
 			var toStrings = type.GetMethods().Where(m => m.Name == "ToString" && m.DeclaringType == type && m.GetParameters().Length == 0);
 			if (toStrings.Any())
 			{
-				return toStrings.First().Invoke(value, new object[0]).ToString();
+				var toStringResult = toStrings.First().Invoke(value, new object[0]);
+				return toStringResult != null ? toStringResult.ToString() : string.Empty;
 			}
 
 			var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance).Where(p => p.GetIndexParameters().Length == 0);

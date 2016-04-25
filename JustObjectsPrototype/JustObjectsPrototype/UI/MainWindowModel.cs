@@ -124,6 +124,7 @@ namespace JustObjectsPrototype.UI
 				else
 				{
 					Properties = new List<IPropertyViewModel>();
+					Functions = new List<Tuple<string, Command>>();
 				}
 
 				Changed(() => Properties);
